@@ -1,0 +1,10 @@
+.idea
+.vscode
+*.pdf
+__pycache__
+venv
+known/*.jpg
+known/*.png
+grabber/__pycache__
+report/__pycache__
+utils/__pycache__

@@ -1,0 +1,17 @@
+{
+    "DEFAULTS": {
+        "SLEEP_DELAY": "5",
+        "GOOGLE_IMG_PAGES": "3"
+    },
+    "WEBDRIVER": {
+        "ENGINE": "firefox",
+        "PATH": "/usr/bin/geckodriver"
+    },
+    "FILTER": [
+        "instagram.com",
+        "twitter.com",
+        "pinterest.com",
+        "plus.google.com"
+    ],
+    "INSTA_VALIDATION_MAX_IMAGES": "5"
+}

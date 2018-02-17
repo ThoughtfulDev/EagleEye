@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{INPUT_NAME}}</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family:Georgia,Times,Times New Roman,serif;
+            font-size:1em;
+        }
+        h1 {
+            font-size:1.8em;
+        }
+        h3 {
+            font-size:1.1em;
+        }
+        ul {
+            list-style-type: none;
+        }
+        .logo {
+	        background-image: url(data:image/png;base64,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);
+            margin: 0 auto;
+            width: 563px;
+            height:100px;
+            background-repeat:no-repeat;
+            text-align:center;
+        }
+
+    </style>
+</head>
+<body>
+<div class="logo"></div>
+
+
+
+<h1>Result for {{INPUT_NAME}}</h1>
+<hr>
+
+<h3>Social Media URLs found</h3>
+<p>
+    <ul>
+        {{SOCIAL_URLS}}
+    </ul>
+</p>
+
+<hr>
+<h3>Google Reverse Image Search Suggestions</h3>
+<p>
+    <ul>
+        {{GOOGLE_PREDS}}
+    </ul>
+</p>
+
+<hr>
+<h3>Validated Instagram Profiles</h3>
+<p>
+    <ul>
+        {{INSTA_PROFILES}}
+    </ul>
+</p>
+
+</body>
+</html>
