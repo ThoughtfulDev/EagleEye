@@ -1,8 +1,9 @@
 .idea
 .vscode
-*.pdf
+*_Report.pdf
 __pycache__
 venv
+*.log
 known/*.jpg
 known/*.png
 grabber/__pycache__
