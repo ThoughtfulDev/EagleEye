@@ -17,8 +17,8 @@ def filterLink(link):
 
 
 class GoogleGrabber:
-    def __init__(self, max_pages=3):
-        self.max_pages = max_pages
+    def __init__(self):
+        self.max_pages = cfg.google_img_pages()
         console.section('Google Reverse Image Search')
         console.task('Opening Webdriver')
         self.driver = cfg.getWebDriver()
@@ -88,7 +88,7 @@ class GoogleGrabber:
             input_box = driver.find_element_by_xpath('//*[@id="qbfile"]')
             p_i = os.path.join(os.getcwd(), str_p)
             input_box.send_keys(p_i)
-            time.sleep(cfg.google_img_pages())
+            time.sleep(cfg.timeout() * 2)
             try:
                 pred = driver.find_element_by_xpath("/html/body/div[6]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
                 pred = pred.text

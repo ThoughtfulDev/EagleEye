@@ -87,7 +87,7 @@ def main():
         console.subtask(profile_links[i])
 
     # google reverse image search on profile pics
-    g = GoogleGrabber(max_pages=3)
+    g = GoogleGrabber()
     for img in profile_imgs:
         g.collectLinks(img)
 
@@ -103,19 +103,23 @@ def main():
         console.task("Validating Profile: '{0}'".format(un))
         if validateInstaUser(un, num_jitters):
             validatedInstaNames.append(un)
-        
+    
+
     raider_img_list = profile_imgs
     for v in validatedInstaNames:
         l = getInstaLinks(v)
         for li in l:
             raider_img_list.append(li)
 
-    raider = ImageRaiderGrabber()
-    raider.insertImageLinks(raider_img_list)
-    raider.downloadCSV()
-    raider_links = raider.processCSV()
-    for raider_link in raider_links:
-        rev_links.append(raider_link)
+    if len(raider_img_list) <= 0:
+        console.failure('No Links founds...')
+    else:
+        raider = ImageRaiderGrabber()
+        raider.insertImageLinks(raider_img_list)
+        raider.downloadCSV()
+        raider_links = raider.processCSV()
+        for raider_link in raider_links:
+            rev_links.append(raider_link)
 
 
     rev_links = list(set(rev_links))

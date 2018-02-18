@@ -7,8 +7,10 @@
 ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝   ╚══════╝   ╚═╝   ╚══════╝
                     Jerry Shaw, you have been activated    
 
-Find your friends Social Media Profiles with ease         
+Find your friends Social Media Profiles with ease     
 ```
+
+**This only works if their Facebook Profile is public**
 
 ## What does this do?
 In simple words you have at least one Image of the Person you are looking for and a clue about its name. You feed this program with it and it tries to find Instagram, Youtube, Facebook, Twitter Profiles of this Person.
