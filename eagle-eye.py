@@ -8,6 +8,7 @@ import utils.console as console
 import utils.config as cfg
 from grabber.facebook import FBGrabber
 from grabber.google import GoogleGrabber
+from grabber.yandex import YandexGrabber
 from grabber.imageraider import ImageRaiderGrabber
 from face_recog import FaceRecog
 from instaLooter import InstaLooter
@@ -95,6 +96,14 @@ def main():
     g.collectLinksLocal()
     rev_links, predictions = g.finish()
 
+    yandex = YandexGrabber()
+    for img in profile_imgs:
+        yandex.collectLinks(img)
+    
+    #add to rev_links
+    for e in yandex.finish():
+        rev_links.append(e)
+    rev_links = list(set(rev_links))
 
     instaNames = parseInstaUsername(filterInstaLinks(rev_links))
     validatedInstaNames = []
