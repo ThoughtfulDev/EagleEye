@@ -20,6 +20,7 @@ class ImageRaiderGrabber:
         console.section('ImageRaider Reverse Image Search')
         console.task('Opening Webdriver')
         self.driver = cfg.getWebDriver()
+        self.csv_error = False
     
     def insertImageLinks(self, images):
         self.driver.get("https://www.imageraider.com/")
@@ -54,21 +55,25 @@ class ImageRaiderGrabber:
             dl.click()
         except:
             console.failure('No Results...')
+            self.csv_error = True
         self.driver.close()
     
     def processCSV(self):
-        time.sleep(2)
-        p = os.path.join(tempfile.gettempdir(), 'imageraider')
-        pathlist = Path(p).glob('**/*')
-        links = []
-        for path in pathlist:
-            path = str(path)
-            with open(path, 'r') as csvfile:
-                reader = csv.DictReader(csvfile)
-                for row in reader:
-                    if filterLink(row['Discovered Page URL']):
-                        console.subtask('Added {0}'.format(row['Discovered Page URL']))
-                        links.append(row['Discovered Page URL'])
-        return links
+        if not self.csv_error:
+            time.sleep(2)
+            p = os.path.join(tempfile.gettempdir(), 'imageraider')
+            pathlist = Path(p).glob('**/*')
+            links = []
+            for path in pathlist:
+                path = str(path)
+                with open(path, 'r') as csvfile:
+                    reader = csv.DictReader(csvfile)
+                    for row in reader:
+                        if filterLink(row['Discovered Page URL']):
+                            console.subtask('Added {0}'.format(row['Discovered Page URL']))
+                            links.append(row['Discovered Page URL'])
+            return links
+        else:
+            return []
 
 
