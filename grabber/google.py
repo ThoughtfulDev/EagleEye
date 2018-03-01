@@ -32,6 +32,7 @@ class GoogleGrabber:
         console.subtask('Inserting Image URL')
         elems = driver.find_elements_by_xpath('//*[@id="qbi"]')[0]
         elems.click()
+        time.sleep(1)
         input = driver.find_elements_by_xpath('//*[@id="qbui"]')[0]
         input.clear()
         input.send_keys(img_url)

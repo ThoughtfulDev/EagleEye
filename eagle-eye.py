@@ -16,10 +16,16 @@ from report.report import makeReport
 
 
 def presentResult(predictions):
-    argmax = Counter(predictions)
-    console.section("Result")
-    (most_common_str, _) = argmax.most_common(n=1)[0]
-    console.task("Google says it could be: {0}".format(most_common_str))
+    if len(predictions) > 0:
+        argmax = Counter(predictions)
+        console.section("Result")
+        if len(argmax.most_common(n=1)) > 0:
+            (most_common_str, _) = argmax.most_common(n=1)[0]
+        else:
+            most_common_str = 'None'
+        console.task("Google says it could be: {0}".format(most_common_str))
+    else:
+        console.failure("No predictions found")
 
 def filterInstaLinks(links):
     r = []
