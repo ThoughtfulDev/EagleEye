@@ -31,11 +31,15 @@ In the end you get a PDF Report :)
 Do this **once**
 ```
 $ git clone https://github.com/ThoughtfulDev/EagleEye
+$ sudo apt install cmake
 $ cd EagleEye && pip3 install -r requirements.txt
 ```
 Now install Firefox
 
 If you have Firefox installed, download the [latest release](https://github.com/mozilla/geckodriver/releases/latest) of the Geckodriver for you Architecture.
+
+**Note: If you are using Firefox ESR(like Kali does) please use the Geckodriver Version 17**
+
 Next change the value in `config.json` to the path of the geckodriver e.g
 ```
 {
@@ -51,6 +55,11 @@ Next change the value in `config.json` to the path of the geckodriver e.g
     ],
     ...
 }
+```
+
+Make the Geckodriver executable
+```
+$ chmod +x /path/to/geckodriver
 ```
 
 *I will try to implement the Chrome Webdriver as soon as possible*
