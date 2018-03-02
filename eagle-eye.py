@@ -2,6 +2,7 @@
 
 import os
 import tempfile
+import argparse
 from collections import Counter
 from pathlib import Path
 import utils.console as console
@@ -66,10 +67,14 @@ def getInstaLinks(username):
             i = i + 1
     return images
 
-def main():
-    # collect user input
-    console.prompt('Enter the persons name to find on FB: ')
-    name = input('')
+def main(skipFB=False):
+    if not skipFB:
+        # collect user input
+        console.prompt('Enter the persons name to find on FB: ')
+        name = input('')
+    else:
+        console.task('Skipping FB Search')
+        name = "Unknown"
 
     console.prompt('How many jitters, higher is better [max 100]: ')
     num_jitters = input('')
@@ -79,19 +84,21 @@ def main():
         num_jitters = 100
         console.subfailure('Using 100 jitters...')
 
-    # grab profile urls
-    f = FBGrabber(name)
-    f.grabData()
-
-    # do face recognition on those profile images
-    r = FaceRecog(f.getProfileLinks(), f.getProfileImages(), num_jitters=num_jitters)
-    r.loadKnown(name)
-
-    profile_links, profile_imgs = r.getValidLinksAndImg(name)
-    console.section('Result')
-    console.task('Found the following Profiles:')
-    for i in range(len(profile_links)):
-        console.subtask(profile_links[i])
+    if not skipFB:
+        # grab profile urls
+        f = FBGrabber(name)
+        f.grabData()
+        # do face recognition on those profile images
+        r = FaceRecog(f.getProfileLinks(), f.getProfileImages(), num_jitters=num_jitters)
+        r.loadKnown(name)
+        profile_links, profile_imgs = r.getValidLinksAndImg(name)
+        console.section('Result')
+        console.task('Found the following Profiles:')
+        for i in range(len(profile_links)):
+            console.subtask(profile_links[i])
+    
+    profile_links = []
+    profile_imgs = []
 
     # google reverse image search on profile pics
     g = GoogleGrabber()
@@ -105,7 +112,7 @@ def main():
     yandex = YandexGrabber()
     for img in profile_imgs:
         yandex.collectLinks(img)
-    
+    yandex.collectLinksLocal()
     #add to rev_links
     for e in yandex.finish():
         rev_links.append(e)
@@ -127,7 +134,7 @@ def main():
             raider_img_list.append(li)
 
     if len(raider_img_list) <= 0:
-        console.failure('No Links founds...')
+        console.failure('No Links found...')
     else:
         raider = ImageRaiderGrabber()
         raider.insertImageLinks(raider_img_list)
@@ -165,4 +172,7 @@ def main():
 
 if __name__ == "__main__":
     console.banner()
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-F', '--skipfb', action='store_true', help='Skips the Facebook Search')
+    args = parser.parse_args()
+    main(skipFB=args.skipfb)
