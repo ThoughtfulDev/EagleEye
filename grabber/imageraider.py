@@ -42,12 +42,16 @@ class ImageRaiderGrabber:
         btn.click()
     
     def downloadCSV(self):
-        time.sleep(7)
+        time.sleep(5)
         console.task('Waiting for page to finish')
-        while "Loading" in self.driver.page_source:
-            sys.stdout.write(".")
-            sys.stdout.flush()
-            time.sleep(1)
+        try:
+            while "Loading" in self.driver.page_source:
+                sys.stdout.write(".")
+                sys.stdout.flush()
+                time.sleep(1)
+        except:
+            console.subfailure('Pagetimeout')
+            sys.exit(-1)
         print('')
         console.task('Downloading CSV')
         time.sleep(2)

@@ -67,7 +67,7 @@ def getInstaLinks(username):
             i = i + 1
     return images
 
-def main(skipFB=False):
+def main(skipFB=False, skipIR=False, skipY=False):
     if not skipFB:
         # collect user input
         console.prompt('Enter the persons name to find on FB: ')
@@ -96,9 +96,9 @@ def main(skipFB=False):
         console.task('Found the following Profiles:')
         for i in range(len(profile_links)):
             console.subtask(profile_links[i])
-    
-    profile_links = []
-    profile_imgs = []
+    else:
+        profile_links = []
+        profile_imgs = []
 
     # google reverse image search on profile pics
     g = GoogleGrabber()
@@ -109,13 +109,16 @@ def main(skipFB=False):
     g.collectLinksLocal()
     rev_links, predictions = g.finish()
 
-    yandex = YandexGrabber()
-    for img in profile_imgs:
-        yandex.collectLinks(img)
-    yandex.collectLinksLocal()
-    #add to rev_links
-    for e in yandex.finish():
-        rev_links.append(e)
+    if not skipY:
+        yandex = YandexGrabber()
+        for img in profile_imgs:
+            yandex.collectLinks(img)
+        yandex.collectLinksLocal()
+        #add to rev_links
+        for e in yandex.finish():
+            rev_links.append(e)
+    else:
+        console.task('Skipping Yandex Search')
     rev_links = list(set(rev_links))
 
     instaNames = parseInstaUsername(filterInstaLinks(rev_links))
@@ -136,12 +139,15 @@ def main(skipFB=False):
     if len(raider_img_list) <= 0:
         console.failure('No Links found...')
     else:
-        raider = ImageRaiderGrabber()
-        raider.insertImageLinks(raider_img_list)
-        raider.downloadCSV()
-        raider_links = raider.processCSV()
-        for raider_link in raider_links:
-            rev_links.append(raider_link)
+        if not skipIR:
+            raider = ImageRaiderGrabber()
+            raider.insertImageLinks(raider_img_list)
+            raider.downloadCSV()
+            raider_links = raider.processCSV()
+            for raider_link in raider_links:
+                rev_links.append(raider_link)
+        else:
+            console.task('Skipping ImageRaider Search')
 
 
     rev_links = list(set(rev_links))
@@ -156,7 +162,9 @@ def main(skipFB=False):
     print(predictions)
     presentResult(predictions)
     
-
+    for pl in profile_links:
+        rev_links.append(pl)
+    rev_links = list(set(rev_links))
     console.section("Creating PDF Report")
     makeReport(name, rev_links, predictions, validatedInstaNames)
 
@@ -173,6 +181,8 @@ def main(skipFB=False):
 if __name__ == "__main__":
     console.banner()
     parser = argparse.ArgumentParser()
-    parser.add_argument('-F', '--skipfb', action='store_true', help='Skips the Facebook Search')
+    parser.add_argument('-sFB', '--skipfb', action='store_true', help='Skips the Facebook Search')
+    parser.add_argument('-sIR', '--skipir', action='store_true', help='Skips the ImageRaider Reverse Search')
+    parser.add_argument('-sY', '--skipyandex', action='store_true', help='Skips the Yandex Reverse Search')
     args = parser.parse_args()
-    main(skipFB=args.skipfb)
+    main(skipFB=args.skipfb, skipIR=args.skipir, skipY=args.skipyandex)
