@@ -72,6 +72,11 @@ Then run the program ;)
 $ python3 eagle-eye.py
 ```
 
+To see a list of all available Options just type
+```
+$ python3 eagle-eye.py -h
+```
+
 *The ImageRaider Reverse Image Search can take some minutes 1-15 Minutes depending on the count of Images*
 
 
