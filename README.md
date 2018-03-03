@@ -31,7 +31,7 @@ In the end you get a PDF Report :)
 Do this **once**
 ```
 $ git clone https://github.com/ThoughtfulDev/EagleEye
-$ sudo apt install cmake
+$ sudo apt install cmake libffi-dev
 $ cd EagleEye && pip3 install -r requirements.txt
 ```
 Now install Firefox
