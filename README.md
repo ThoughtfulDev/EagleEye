@@ -87,6 +87,14 @@ $ python3 eagle-eye.py -h
 ![2](https://thoughtful-dev.com/projects/eagle-eye/2.png)  
 ![3](https://thoughtful-dev.com/projects/eagle-eye/3.png)            
 
+## Contributing
+You can always open a Pull Request
+
+OR
+
+[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/supergirl)
+
+
 ## License
 ```
             DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
