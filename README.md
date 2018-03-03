@@ -33,6 +33,8 @@ Do this **once**
 $ git clone https://github.com/ThoughtfulDev/EagleEye
 $ sudo apt install cmake libffi-dev
 $ cd EagleEye && pip3 install -r requirements.txt
+$ pip3 install --upgrade beautifulsoup4 html5lib
+$ pip3 install spry 
 ```
 Now install Firefox
 
