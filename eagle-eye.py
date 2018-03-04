@@ -11,6 +11,7 @@ from grabber.facebook import FBGrabber
 from grabber.google import GoogleGrabber
 from grabber.yandex import YandexGrabber
 from grabber.imageraider import ImageRaiderGrabber
+from grabber.pictriev import PictrievGrabber
 from face_recog import FaceRecog
 from instaLooter import InstaLooter
 from report.report import makeReport
@@ -165,8 +166,22 @@ def main(skipFB=False, skipIR=False, skipY=False):
     for pl in profile_links:
         rev_links.append(pl)
     rev_links = list(set(rev_links))
+
+    #estimate age
+    ageEstimator = PictrievGrabber()
+    if len(validatedInstaNames) > 0:
+        for v in validatedInstaNames:
+            l = getInstaLinks(v)
+            for li in l:
+                ageEstimator.collectAges(li)
+        age = ageEstimator.finish()
+    else:
+        console.failure('No Instagram Images to upload...')
+        ageEstimator.finish()
+        age = "Unknown"
+
     console.section("Creating PDF Report")
-    makeReport(name, rev_links, predictions, validatedInstaNames)
+    makeReport(name, rev_links, predictions, validatedInstaNames, age)
 
 
     p = os.path.join(tempfile.gettempdir(), 'imageraider')

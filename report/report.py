@@ -1,7 +1,7 @@
 from weasyprint import HTML
 import os
 
-def makeReport(name, links, preds, instnames):
+def makeReport(name, links, preds, instnames, age):
     #sort
     links = sorted(links)
     preds = sorted(preds)
@@ -12,6 +12,7 @@ def makeReport(name, links, preds, instnames):
     with open('./report/template.html', 'r') as f:
         template_data = f.read()
     template_data = template_data.replace('{{INPUT_NAME}}', name)
+    template_data = template_data.replace('{{ES_AGE}}', str(age))
     links_str = ""
     for l in links:
         links_str += "<li>"
