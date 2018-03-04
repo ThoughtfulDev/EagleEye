@@ -28,16 +28,22 @@ In the end you get a PDF Report :)
 
 ## How to use it
 
-Do this **once**
+### Automated Prequisites Installation
 ```
-$ git clone https://github.com/ThoughtfulDev/EagleEye
-$ sudo apt install cmake libffi-dev
-$ cd EagleEye && pip3 install -r requirements.txt
-$ pip3 install --upgrade beautifulsoup4 html5lib
-$ pip3 install spry 
+wget https://raw.githubusercontent.com/ThoughtfulDev/EagleEye/master/pre.sh && chmod +x pre.sh && ./pre.sh
 ```
-Now install Firefox
 
+### Manual Prequisites Installation
+```
+$ sudo apt update && sudo apt upgrade -y
+$ sudo apt install git python3 python3-pip python3-dev
+$ sudo apt install libgtk-3-dev libboost-all-dev build-essential cmake libffi-dev
+$ git clone https://github.com/ThoughtfulDev/EagleEye
+$ cd EagleEye && sudo pip3 install -r requirements.txt
+$ sudo pip3 install --upgrade beautifulsoup4 html5lib spry
+```
+
+Regardless of which option you choose make sure that you have Firefox installed
 If you have Firefox installed, download the [latest release](https://github.com/mozilla/geckodriver/releases/latest) of the Geckodriver for you Architecture.
 
 **Note: If you are using Firefox ESR(like Kali does) please use the Geckodriver Version 17**
