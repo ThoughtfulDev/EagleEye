@@ -13,7 +13,8 @@ from grabber.yandex import YandexGrabber
 from grabber.imageraider import ImageRaiderGrabber
 from grabber.pictriev import PictrievGrabber
 from face_recog import FaceRecog
-from instaLooter import InstaLooter
+from pathlib import Path
+import subprocess, json, shutil
 from report.report import makeReport
 
 
@@ -56,16 +57,16 @@ def validateInstaUser(username, num_jitters):
     return len(profile_links) > 0
 
 def getInstaLinks(username):
-    looter = InstaLooter(profile=username)
     images = []
-    i = 0
-    for media in looter.medias():
-        if i > cfg.instaLimit():
-            break
-        if not media['is_video']:
-            console.subtask("Got Image: {0}".format(media['display_src'].strip()[:90]))
-            images.append(media['display_src'])
-            i = i + 1
+    subprocess.call('./instaLooter.sh ' + username + ' ' + str(cfg.instaLimit()), shell=True)
+    pathlist = Path('./tmp_insta').glob('**/*.json')
+    for p in pathlist:
+        with open(str(p)) as json_data:
+            data = json.load(json_data)
+        images.append(data['display_url'])
+
+    if os.path.isdir('./tmp_insta'):
+        shutil.rmtree('./tmp_insta')
     return images
 
 def main(skipFB=False, skipIR=False, skipY=False):
