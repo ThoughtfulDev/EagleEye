@@ -4,6 +4,7 @@ from urllib.request import urlretrieve
 from pathlib import Path
 import os
 import tempfile
+from sys import platform
 import random
 import string
 import utils.console as console
@@ -23,7 +24,10 @@ class FaceRecog:
         pathlist = Path('./known').glob('**/*.jpg')
         for path in pathlist:
             p_str = str(path)
-            console.subtask('Loading {0}'.format(p_str.split('/')[1]))
+            delim = '/'
+            if platform == "win32":
+                delim = '\\'
+            console.subtask('Loading {0}'.format(p_str.split(delim)[1]))
             im = face_recognition.load_image_file(p_str)
             encoding = face_recognition.face_encodings(im, num_jitters=self.num_jitters)
             for e in encoding:

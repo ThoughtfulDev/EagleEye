@@ -58,7 +58,7 @@ def validateInstaUser(username, num_jitters):
 
 def getInstaLinks(username):
     images = []
-    subprocess.call('./instaLooter.sh ' + username + ' ' + str(cfg.instaLimit()), shell=True)
+    subprocess.call('instaLooter user ' + username + ' ./tmp_insta -D -n ' + str(cfg.instaLimit()), shell=True)
     pathlist = Path('./tmp_insta').glob('**/*.json')
     for p in pathlist:
         with open(str(p)) as json_data:
