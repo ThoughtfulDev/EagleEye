@@ -12,6 +12,7 @@ from grabber.google import GoogleGrabber
 from grabber.yandex import YandexGrabber
 from grabber.imageraider import ImageRaiderGrabber
 from grabber.pictriev import PictrievGrabber
+from grabber.instagram import InstagramGrabber
 from face_recog import FaceRecog
 from pathlib import Path
 import subprocess, json, shutil
@@ -57,17 +58,8 @@ def validateInstaUser(username, num_jitters):
     return len(profile_links) > 0
 
 def getInstaLinks(username):
-    images = []
-    subprocess.call('instaLooter user ' + username + ' ./tmp_insta -D -n ' + str(cfg.instaLimit()), shell=True)
-    pathlist = Path('./tmp_insta').glob('**/*.json')
-    for p in pathlist:
-        with open(str(p)) as json_data:
-            data = json.load(json_data)
-        images.append(data['display_url'])
-
-    if os.path.isdir('./tmp_insta'):
-        shutil.rmtree('./tmp_insta')
-    return images
+    instagrabber = InstagramGrabber(username)
+    return instagrabber.getLinks()
 
 def main(skipFB=False, skipIR=False, skipY=False):
     if not skipFB:
