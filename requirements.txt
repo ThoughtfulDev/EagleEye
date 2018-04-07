@@ -4,4 +4,4 @@ opencv-python
 selenium
 face_recognition
 WeasyPrint
-requests-html
+https://github.com/althonos/InstaLooter/archive/master.zip

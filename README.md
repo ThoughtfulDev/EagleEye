@@ -56,7 +56,7 @@ Next change the value in `config.json` to the path of the geckodriver e.g
     },
     "WEBDRIVER": {
         "ENGINE": "firefox",
-        "PATH": "PATH TO geckodriver e.g C:\Program Files\geckodriver.exe"
+        "PATH": "PATH TO geckodriver e.g C:\\Program Files\\geckodriver.exe"
     },
     "FILTER": [
         ....
