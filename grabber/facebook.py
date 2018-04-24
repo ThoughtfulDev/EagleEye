@@ -56,3 +56,30 @@ class FBGrabber:
 
     def getProfileImages(self):
         return self.profile_img
+
+class FBProfileGrabber:
+    def __init__(self, profile_links):
+        self._pl = profile_links
+    
+    def grabLinks(self):
+        img_urls = []
+        console.task('Opening Webdriver')
+        driver = cfg.getWebDriver()
+        for profile_url in self._pl:
+            driver.get(profile_url)
+
+            #first possibility
+            profile_img_links = driver.find_elements_by_xpath("/html/body/div[1]/div[4]/div[1]/div/div[2]/div[2]/div[2]/div/div[1]/div[1]/div[3]/div/div[2]/div[3]/div/div/div/img")
+            for e in profile_img_links:
+                img_src = e.get_attribute("src")
+                img_urls.append(img_src)
+            
+            #second possivility
+            profile_img_links = driver.find_elements_by_xpath("/html/body/div[1]/div[4]/div[1]/div/div/div[1]/div/div/div[1]/div/a/img")
+            for e in profile_img_links:
+                img_src = e.get_attribute("src")
+                img_urls.append(img_src)
+            
+        driver.close()
+        return list(set(img_urls))
+                

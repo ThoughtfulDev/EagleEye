@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
-import os
+import os, sys
 import tempfile
 import argparse
 from collections import Counter
 from pathlib import Path
 import utils.console as console
 import utils.config as cfg
-from grabber.facebook import FBGrabber
+from grabber.facebook import FBGrabber, FBProfileGrabber
 from grabber.google import GoogleGrabber
 from grabber.yandex import YandexGrabber
 from grabber.imageraider import ImageRaiderGrabber
@@ -61,7 +61,7 @@ def getInstaLinks(username):
     instagrabber = InstagramGrabber(username)
     return instagrabber.getLinks()
 
-def main(skipFB=False, skipIR=False, skipY=False):
+def main(skipFB=False, skipIR=False, skipY=False, FBUrls=[]):
     if not skipFB:
         # collect user input
         console.prompt('Enter the persons name to find on FB: ')
@@ -91,8 +91,21 @@ def main(skipFB=False, skipIR=False, skipY=False):
         for i in range(len(profile_links)):
             console.subtask(profile_links[i])
     else:
-        profile_links = []
-        profile_imgs = []
+        if len(FBUrls) > 0:
+            f = FBProfileGrabber(FBUrls)
+            img_urls = f.grabLinks()
+            #FBURLS are our profile links synchron with img_urls
+            # so FBURLS[0] <=> img_urls[0]
+            r = FaceRecog(FBUrls, img_urls, num_jitters=num_jitters)
+            r.loadKnown(name)
+            profile_links, profile_imgs = r.getValidLinksAndImg(name)
+            console.section('Result')
+            console.task('Found the following Profiles:')
+            for i in range(len(profile_links)):
+                console.subtask(profile_links[i])
+        else:
+            profile_links = []
+            profile_imgs = []
 
     # google reverse image search on profile pics
     g = GoogleGrabber()
@@ -192,5 +205,21 @@ if __name__ == "__main__":
     parser.add_argument('-sFB', '--skipfb', action='store_true', help='Skips the Facebook Search')
     parser.add_argument('-sIR', '--skipir', action='store_true', help='Skips the ImageRaider Reverse Search')
     parser.add_argument('-sY', '--skipyandex', action='store_true', help='Skips the Yandex Reverse Search')
+    parser.add_argument('-fbList', 
+                        '--facebookList', 
+                        nargs='?', 
+                        help="A file which contains Links to Facebook Profiles. '--skipfb' options must be enabled to use this" )
     args = parser.parse_args()
-    main(skipFB=args.skipfb, skipIR=args.skipir, skipY=args.skipyandex)
+
+    if args.facebookList and args.skipfb:
+        if os.path.isfile(args.facebookList):
+            with open(args.facebookList, 'r') as f:
+                content = f.readlines()
+            content = [x.strip() for x in content] 
+            print(content)
+            main(skipFB=args.skipfb, skipIR=args.skipir, skipY=args.skipyandex, FBUrls=content)
+        else:
+            console.failure("File '{}' does not exist".format(args.facebookList))
+            sys.exit(-1)
+    else:
+        main(skipFB=args.skipfb, skipIR=args.skipir, skipY=args.skipyandex, FBUrls=[])
