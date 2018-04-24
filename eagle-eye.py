@@ -216,7 +216,6 @@ if __name__ == "__main__":
             with open(args.facebookList, 'r') as f:
                 content = f.readlines()
             content = [x.strip() for x in content] 
-            print(content)
             main(skipFB=args.skipfb, skipIR=args.skipir, skipY=args.skipyandex, FBUrls=content)
         else:
             console.failure("File '{}' does not exist".format(args.facebookList))
