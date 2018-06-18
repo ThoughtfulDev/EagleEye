@@ -116,7 +116,9 @@ def main(skipFB=False, skipIR=False, skipY=False, FBUrls=[]):
     g.collectLinksLocal()
     rev_links, predictions = g.finish()
 
-    if not skipY:
+    #TODO: Fix yandex search
+    #if not skipY:
+    if False:
         yandex = YandexGrabber()
         for img in profile_imgs:
             yandex.collectLinks(img)
@@ -204,7 +206,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-sFB', '--skipfb', action='store_true', help='Skips the Facebook Search')
     parser.add_argument('-sIR', '--skipir', action='store_true', help='Skips the ImageRaider Reverse Search')
-    parser.add_argument('-sY', '--skipyandex', action='store_true', help='Skips the Yandex Reverse Search')
+    #parser.add_argument('-sY', '--skipyandex', action='store_true', help='Skips the Yandex Reverse Search')
     parser.add_argument('-fbList', 
                         '--facebookList', 
                         nargs='?', 
@@ -216,9 +218,13 @@ if __name__ == "__main__":
             with open(args.facebookList, 'r') as f:
                 content = f.readlines()
             content = [x.strip() for x in content] 
-            main(skipFB=args.skipfb, skipIR=args.skipir, skipY=args.skipyandex, FBUrls=content)
+            #TODO: fix yandex
+            #main(skipFB=args.skipfb, skipIR=args.skipir, skipY=args.skipyandex, FBUrls=content)
+            main(skipFB=args.skipfb, skipIR=args.skipir, skipY=None, FBUrls=content)
         else:
             console.failure("File '{}' does not exist".format(args.facebookList))
             sys.exit(-1)
     else:
-        main(skipFB=args.skipfb, skipIR=args.skipir, skipY=args.skipyandex, FBUrls=[])
+        #TODO: fix yandex
+        #main(skipFB=args.skipfb, skipIR=args.skipir, skipY=args.skipyandex, FBUrls=[])
+        main(skipFB=args.skipfb, skipIR=args.skipir, skipY=None, FBUrls=[])

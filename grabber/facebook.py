@@ -19,7 +19,7 @@ class FBGrabber:
         self.profile_img = []
 
         #get all profile image links
-        profile_img_links = driver.find_elements_by_xpath("//a[@class='_2ial _8o _8s lfloat _ohe']")
+        profile_img_links = driver.find_elements_by_xpath("//a[@class='_2ial']")
         console.subtask('Collecting Image URLs...(Page 1)')
 
         for e in profile_img_links:
@@ -39,7 +39,7 @@ class FBGrabber:
 
         for page in pages_links:
             driver.get(page)
-            profile_img_links = driver.find_elements_by_xpath("//a[@class='_2ial _8o _8s lfloat _ohe']")
+            profile_img_links = driver.find_elements_by_xpath("//a[@class='_2ial']")
             page_num = page[-1:]
             console.subtask('Collecting Images URLs...(Page {0})'.format(page_num))
             for e in profile_img_links:

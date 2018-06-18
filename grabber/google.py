@@ -40,7 +40,7 @@ class GoogleGrabber:
         console.subtask('Searching for Image...')
         time.sleep(cfg.timeout())
         try:
-            pred = driver.find_element_by_xpath("/html/body/div[6]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
+            pred = driver.find_element_by_xpath("/html/body/div[5]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
             pred = pred.text
         except NoSuchElementException:
             console.subfailure('No Prediction given sry...')

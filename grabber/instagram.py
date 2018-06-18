@@ -14,16 +14,19 @@ class InstagramGrabber:
         json_str = json_str[:-1]
         json_parsed = json.loads(json_str)
         shortcodes = []
-        images = json_parsed['entry_data']['ProfilePage'][0]['graphql']['user']['edge_owner_to_timeline_media']['edges']
-        for image in images:
-            node = image['node']
-            shortcode = node['shortcode']
-            shortcodes.append(shortcode)
-        links = []
-        for sc in shortcodes:
-            r = session.get('https://instagram.com/p/' + sc + '/?taken-by=' + self.username)
-            img = r.html.find('head > meta[property="og:image"]')
-            if len(img) > 0:
-                img = img[0]
-                links.append(img.attrs['content'])
-        return links
+        try:
+            images = json_parsed['entry_data']['ProfilePage'][0]['graphql']['user']['edge_owner_to_timeline_media']['edges']
+            for image in images:
+                node = image['node']
+                shortcode = node['shortcode']
+                shortcodes.append(shortcode)
+            links = []
+            for sc in shortcodes:
+                r = session.get('https://instagram.com/p/' + sc + '/?taken-by=' + self.username)
+                img = r.html.find('head > meta[property="og:image"]')
+                if len(img) > 0:
+                    img = img[0]
+                    links.append(img.attrs['content'])
+            return links
+        except:
+            return []
