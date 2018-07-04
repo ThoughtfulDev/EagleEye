@@ -45,6 +45,7 @@ $ sudo pip3 install --upgrade beautifulsoup4 html5lib spry
 
 Regardless of which option you choose make sure that you have Firefox installed
 If you have Firefox installed, download the [latest release](https://github.com/mozilla/geckodriver/releases/latest) of the Geckodriver for you Architecture.
+**If you get a `broken pipe` Error change use Geckodriver Version 0.19.1**
 
 **Note: If you are using Firefox ESR(like Kali does) please use the Geckodriver Version 17**
 
