@@ -38,7 +38,7 @@ In the end you get a PDF Report :)
 
 ### Automated Prequisites Installation
 ```
-wget https://raw.githubusercontent.com/ThoughtfulDev/EagleEye/master/install.sh && chmod +x pre.sh && ./pre.sh
+wget https://raw.githubusercontent.com/ThoughtfulDev/EagleEye/master/install.sh && chmod +x install.sh && ./install.sh
 ```
 
 ### Manual Prequisites Installation
