@@ -18,6 +18,14 @@ Find your friends Social Media Profiles with ease
 ## What does this do?
 In simple words you have at least one Image of the Person you are looking for and a clue about its name. You feed this program with it and it tries to find Instagram, Youtube, Facebook, Twitter Profiles of this Person.
 
+## Screenshots?
+[Example Report](https://github.com/ThoughtfulDev/EagleEye/blob/master/Example.pdf) (Used one Image of Emeraude Toubia)
+
+![1](https://thoughtful-dev.com/projects/eagle-eye/1.png)  
+![2](https://thoughtful-dev.com/projects/eagle-eye/2.png)  
+![3](https://thoughtful-dev.com/projects/eagle-eye/3.png)            
+
+
 ## How does it work?
 You give it a name and at least one photo. It then searches Facebook for this name and does Facial Recognition to determine the right Facebook Profile.
 After that it does a Google and ImageRaider Reverse Image Search to find other Social Media Profiles.
@@ -30,14 +38,25 @@ In the end you get a PDF Report :)
 
 ### Automated Prequisites Installation
 ```
-wget https://raw.githubusercontent.com/ThoughtfulDev/EagleEye/master/pre.sh && chmod +x pre.sh && ./pre.sh
+wget https://raw.githubusercontent.com/ThoughtfulDev/EagleEye/master/install.sh && chmod +x pre.sh && ./pre.sh
 ```
 
 ### Manual Prequisites Installation
+
+For **Debian** based Distros
 ```
 $ sudo apt update && sudo apt upgrade -y
 $ sudo apt install git python3 python3-pip python3-dev
 $ sudo apt install libgtk-3-dev libboost-all-dev build-essential cmake libffi-dev
+$ git clone https://github.com/ThoughtfulDev/EagleEye
+$ cd EagleEye && sudo pip3 install -r requirements.txt
+$ sudo pip3 install --upgrade beautifulsoup4 html5lib spry
+```
+
+For **Arch**
+```
+$ sudo pacman -Syu
+$ sudo pacman -S git python python-pip gtk3 boost cmake libffi
 $ git clone https://github.com/ThoughtfulDev/EagleEye
 $ cd EagleEye && sudo pip3 install -r requirements.txt
 $ sudo pip3 install --upgrade beautifulsoup4 html5lib spry
@@ -89,13 +108,6 @@ $ python3 eagle-eye.py -h
 *The ImageRaider Reverse Image Search can take some minutes 1-15 Minutes depending on the count of Images*
 
 
-## Screenshots?
-[Example Report](https://github.com/ThoughtfulDev/EagleEye/blob/master/Example.pdf) (Used one Image of Emeraude Toubia)
-
-![1](https://thoughtful-dev.com/projects/eagle-eye/1.png)  
-![2](https://thoughtful-dev.com/projects/eagle-eye/2.png)  
-![3](https://thoughtful-dev.com/projects/eagle-eye/3.png)            
-
 ## Contributing
 You can always open a Pull Request
 
@@ -118,5 +130,5 @@ OR
             DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
    TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 
-  0. You just DO WHAT THE FUCK YOU WANT TO.
+  1. You just DO WHAT THE FUCK YOU WANT TO.
 ```
