@@ -2,6 +2,7 @@ import cv2
 import face_recognition
 from urllib.request import urlretrieve
 from pathlib import Path
+
 import os
 import tempfile
 from sys import platform
@@ -19,9 +20,16 @@ class FaceRecog:
         self.known_face_names = []
         console.section('Starting Face Recognition')
 
+
+
     def loadKnown(self, label):    
         console.task('Loading known faces')
-        pathlist = Path('./known').glob('**/*.jpg')
+        pa_g = Path('./known')
+        pathlist = []
+        for ext in ['.jpg', '.JPG', '.png', '.PNG', '.jpeg', '.JPEG', '.bmp', '.BMP']:
+            tmp_pl = pa_g.glob('**/*{}'.format(ext))
+            for t in tmp_pl:
+                pathlist.append(t)
         for path in pathlist:
             p_str = str(path)
             delim = '/'

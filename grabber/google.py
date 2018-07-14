@@ -75,7 +75,12 @@ class GoogleGrabber:
     def collectLinksLocal(self):
         driver = self.driver
         console.section("Uploading Local Known Images")
-        pathlist = Path('./known').glob('**/*.jpg')
+        pa_g = Path('./known')
+        pathlist = []
+        for ext in ['.jpg', '.JPG', '.png', '.PNG', '.jpeg', '.JPEG', '.bmp', '.BMP']:
+            tmp_pl = pa_g.glob('**/*{}'.format(ext))
+            for t in tmp_pl:
+                pathlist.append(t)
         for p in pathlist:
             str_p = str(p)
             driver.get("https://www.google.com/imghp")

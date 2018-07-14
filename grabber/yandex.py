@@ -60,7 +60,12 @@ class YandexGrabber:
         console.task('Uploading Local Images')  
         driver = self.driver
         driver.get("https://www.yandex.com/images/")
-        pathlist = Path('./known').glob('**/*.jpg')
+        pa_g = Path('./known')
+        pathlist = []
+        for ext in ['.jpg', '.JPG', '.png', '.PNG', '.jpeg', '.JPEG', '.bmp', '.BMP']:
+            tmp_pl = pa_g.glob('**/*{}'.format(ext))
+            for t in tmp_pl:
+                pathlist.append(t)
         for p in pathlist:
             str_p = str(p)
             console.subtask('Inserting Image URL')

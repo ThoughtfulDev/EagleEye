@@ -93,7 +93,7 @@ $ chmod +x /path/to/geckodriver
 *I will try to implement the Chrome Webdriver as soon as possible*
 
 Next put at least one Image of the Person you want to find in the `known` folder.
-(**Has to be .jpg for now**)
+Supported Filetypes are: **jpg/JPG, jpeg/JPEG, png/PNG, bmp/BMP**
 
 Then run the program ;)
 ```

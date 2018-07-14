@@ -14,7 +14,6 @@ from grabber.imageraider import ImageRaiderGrabber
 from grabber.pictriev import PictrievGrabber
 from grabber.instagram import InstagramGrabber
 from face_recog import FaceRecog
-from pathlib import Path
 import subprocess, json, shutil
 from report.report import makeReport
 
