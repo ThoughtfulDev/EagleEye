@@ -1,6 +1,6 @@
 {
     "DEFAULTS": {
-        "SLEEP_DELAY": "5",
+        "SLEEP_DELAY": "7",
         "GOOGLE_IMG_PAGES": "3"
     },
     "WEBDRIVER": {

@@ -2,6 +2,9 @@ import time
 import os
 from pathlib import Path
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 import utils.config as cfg
 import utils.console as console
@@ -38,16 +41,32 @@ class GoogleGrabber:
         input.send_keys(img_url)
         input.send_keys(Keys.RETURN)
         console.subtask('Searching for Image...')
-        time.sleep(cfg.timeout())
+        time.sleep(cfg.timeout() * 2)
+        pred_error = False
         try:
             pred = driver.find_element_by_xpath("/html/body/div[5]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
-            pred = pred.text
         except NoSuchElementException:
             console.subfailure('No Prediction given sry...')
             pred = None
+            pred_error = True
+        except BrokenPipeError:
+            #just try again...
+            try:
+                pred = driver.find_element_by_xpath("/html/body/div[5]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
+            except NoSuchElementException:
+                console.subfailure('Broken pipe Error. This is not a Problem...moving on!')
+                console.subfailure('No Prediction given sry...')
+                pred = None
+                pred_error = True
+                
+        if not pred_error:
+            pred = pred.text       
         self.predictions.append(pred)
     
-        link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")     
+        try:
+            link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
+        except BrokenPipeError:
+            link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
         console.subtask("Collecting Links...(Page 1)")
         for link in link_name:
             href = link.get_attribute('href')
@@ -61,8 +80,11 @@ class GoogleGrabber:
                 page_n = driver.find_element_by_link_text(str(num))
                 page_n.click()
                 time.sleep(cfg.timeout())
-                console.subtask("Collecting Links...(Page {0})".format(num))       
-                link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
+                console.subtask("Collecting Links...(Page {0})".format(num))
+                try:  
+                    link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
+                except BrokenPipeError:
+                    link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
                 for link in link_name:
                     href = link.get_attribute('href')
                     if filterLink(href):
@@ -88,6 +110,7 @@ class GoogleGrabber:
             elems.click()
             time.sleep(1)
             elems = driver.find_element_by_xpath('/html/body/div[1]/div[3]/div[3]/div/div[2]/form/div[1]/div/a')
+            
             elems.click()
             time.sleep(1)
             console.subtask("Inserting Path")
@@ -95,14 +118,30 @@ class GoogleGrabber:
             p_i = os.path.join(os.getcwd(), str_p)
             input_box.send_keys(p_i)
             time.sleep(cfg.timeout() * 2)
+            pred_error = False
             try:
-                pred = driver.find_element_by_xpath("/html/body/div[6]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
-                pred = pred.text
+                pred = driver.find_element_by_xpath("/html/body/div[5]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
             except NoSuchElementException:
                 console.subfailure('No Prediction given sry...')
                 pred = None
+                pred_error = True
+            except BrokenPipeError:
+                #just try again...
+                try:
+                    pred = driver.find_element_by_xpath("/html/body/div[5]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
+                except NoSuchElementException:
+                    console.subfailure('Broken pipe Error. This is not a Problem...moving on!')
+                    console.subfailure('No Prediction given sry...')
+                    pred = None
+                    pred_error = True
+                
+            if not pred_error:
+                pred = pred.text       
             self.predictions.append(pred)
-            link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")     
+            try:
+                link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
+            except BrokenPipeError:
+                link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
             console.subtask("Collecting Links...(Page 1)")
             for link in link_name:
                 href = link.get_attribute('href')
@@ -116,8 +155,11 @@ class GoogleGrabber:
                     page_n = driver.find_element_by_link_text(str(num))
                     page_n.click()
                     time.sleep(cfg.timeout())
-                    console.subtask("Collecting Links...(Page {0})".format(num))       
-                    link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
+                    console.subtask("Collecting Links...(Page {0})".format(num))
+                    try:   
+                        link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
+                    except BrokenPipeError:
+                        link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
                     for link in link_name:
                         href = link.get_attribute('href')
                         if filterLink(href):

@@ -30,7 +30,7 @@ class ImageRaiderGrabber:
             input.send_keys(i)
             input.send_keys(Keys.RETURN)
         console.subtask('Submitting...')
-        btn = self.driver.find_elements_by_xpath('/html/body/div[3]/div/div/article/div/div[1]/form/span/input')[0]
+        btn = self.driver.find_elements_by_xpath('/html/body/div[4]/div/div/article/div/div[1]/form/span/input')[0]
         btn.click()
     
     def uploadLocalImage(self, img):
@@ -38,7 +38,7 @@ class ImageRaiderGrabber:
         input = self.driver.find_elements_by_xpath('//*[@id="file"]')[0]
         p_i = os.path.join(os.getcwd(), img)
         input.send_keys(p_i)
-        btn = self.driver.find_elements_by_xpath('/html/body/div[3]/div/div/article/div/div[1]/span/form/input[3]')[0]
+        btn = self.driver.find_elements_by_xpath('/html/body/div[4]/div/div/article/div/div[1]/span/form/input[3]')[0]
         btn.click()
     
     def downloadCSV(self):
