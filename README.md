@@ -16,7 +16,7 @@ Find your friends Social Media Profiles with ease
 **This only works if their Facebook Profile is public**
 
 ## What does this do?
-In simple words you have at least one Image of the Person you are looking for and a clue about its name. You feed this program with it and it tries to find Instagram, Youtube, Facebook, Twitter Profiles of this Person.
+In simple words, you have at least one Image of the person you are looking for and a clue about its name. You enter this data to the EagleEye and it tries to find Instagram, Youtube, Facebook, Twitter Profiles of this person.
 
 ## Screenshots?
 [Example Report](https://github.com/ThoughtfulDev/EagleEye/blob/master/Example.pdf) (Used one Image of Emeraude Toubia)
@@ -27,10 +27,10 @@ In simple words you have at least one Image of the Person you are looking for an
 
 
 ## How does it work?
-You give it a name and at least one photo. It then searches Facebook for this name and does Facial Recognition to determine the right Facebook Profile.
-After that it does a Google and ImageRaider Reverse Image Search to find other Social Media Profiles.
+You give EagleEye a name and at least one photo. It searches this name in Facebook and performs Facial Recognition to find the right Facebook Profile.
+Afterwards it use Google and ImageRaider Reverse Image Search to find other Social Media Profiles.
 
-If a Instagram Profile was found it will be verified by comparing your known photo of the Person to some of the Instagram Pictures.
+If an Instagram Profile was found it will be verified by comparing a provided photo of the person to some of Instagram Pictures.
 
 In the end you get a PDF Report :)
 
@@ -62,8 +62,8 @@ $ cd EagleEye && sudo pip3 install -r requirements.txt
 $ sudo pip3 install --upgrade beautifulsoup4 html5lib spry
 ```
 
-Regardless of which option you choose make sure that you have Firefox installed
-If you have Firefox installed, download the [latest release](https://github.com/mozilla/geckodriver/releases/latest) of the Geckodriver for you Architecture.
+Regardless of which option you choose make sure that you have Firefox installed.
+If Firefox is installed, download the [latest release](https://github.com/mozilla/geckodriver/releases/latest) of the Geckodriver for you Architecture.
 **If you get a `broken pipe` Error use Geckodriver Version 0.19.1**
 
 **Note: If you are using Firefox ESR(like Kali does) please use the Geckodriver Version 17**
