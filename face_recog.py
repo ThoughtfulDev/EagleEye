@@ -80,7 +80,7 @@ class FaceRecog:
         if len(self.known_face_encodings) <= 0:
             console.failure('No Face Encodings found!')
             console.failure('Did you call `loadKnown(label)` before calling this method?')
-            return []
+            return [], []
         valid_url = []
         valid_img = []
         valid_indexes = self.constructIndexes(label)
