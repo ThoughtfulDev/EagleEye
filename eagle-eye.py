@@ -65,12 +65,18 @@ def main(skipFB=False, skipIR=False, skipY=False, FBUrls=[]):
         # collect user input
         console.prompt('Enter the persons name to find on FB: ')
         name = input('')
+        while not name:
+            console.prompt('Enter the persons name to find on FB: ')
+            name = input('')
     else:
         console.task('Skipping FB Search')
         name = "Unknown"
 
-    console.prompt('How many jitters, higher is better [max 100]: ')
+    console.prompt('How many jitters, higher is better [max 100] (default=70): ')
     num_jitters = input('')
+    if not num_jitters:
+        console.task('Settings jitters to 70')
+        num_jitters = 70
     num_jitters = int(num_jitters)
     if num_jitters > 100:
         console.subfailure('Dude wtf?!')
