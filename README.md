@@ -13,10 +13,10 @@
 Find your friends Social Media Profiles with ease     
 ```
 
-**This only works if their Facebook Profile is public**
+**This only works if their Facebook Profile is public.**
 
 ## What does this do?
-In simple words, you have at least one Image of the person you are looking for and a clue about its name. You enter this data to the EagleEye and it tries to find Instagram, Youtube, Facebook, Twitter Profiles of this person.
+You have at least one image of the person you are looking for and a clue about their name. You enter this data into EagleEye and it tries to find Instagram, Youtube, Facebook, and Twitter Profiles of this person.
 
 ## Screenshots?
 [Example Report](https://github.com/ThoughtfulDev/EagleEye/blob/master/Example.pdf) (Used one Image of Emeraude Toubia)
@@ -28,11 +28,11 @@ In simple words, you have at least one Image of the person you are looking for a
 
 ## How does it work?
 You give EagleEye a name and at least one photo. It searches this name in Facebook and performs Facial Recognition to find the right Facebook Profile.
-Afterwards it use Google and ImageRaider Reverse Image Search to find other Social Media Profiles.
+Afterwards it uses Google and ImageRaider Reverse Image Search to find other Social Media Profiles.
 
 If an Instagram Profile was found it will be verified by comparing a provided photo of the person to some of Instagram Pictures.
 
-In the end you get a PDF Report :)
+In the end you get a PDF Report. :)
 
 ## How to use it
 
@@ -62,13 +62,37 @@ $ cd EagleEye && sudo pip3 install -r requirements.txt
 $ sudo pip3 install --upgrade beautifulsoup4 html5lib spry
 ```
 
+### Firefox installation
+
 Regardless of which option you choose make sure that you have Firefox installed.
-If Firefox is installed, download the [latest release](https://github.com/mozilla/geckodriver/releases/latest) of the Geckodriver for you Architecture.
-**If you get a `broken pipe` Error use Geckodriver Version 0.19.1**
 
-**Note: If you are using Firefox ESR(like Kali does) please use the Geckodriver Version 17**
+If you are running a desktop version of Debian or Arch you likely have this installed already.
 
-Next change the value in `config.json` to the path of the geckodriver e.g
+If you are not running a desktop version you may need to manually install.
+
+### Geckodriver
+
+Once Firefox is installed, download the [latest release](https://github.com/mozilla/geckodriver/releases/latest) of the Geckodriver for you Architecture.
+
+**If you get a `broken pipe` Error use Geckodriver Version 0.19.1.**
+
+**Note: If you are using Firefox ESR (like Kali does) please use the Geckodriver Version 0.17.**
+
+Make the Geckodriver executable:
+```
+$ chmod +x /path/to/geckodriver
+```
+
+Note: The `geckodriver` prefers to be in your path so wherever you do set it up you will likely need to setup a link to somewhere in your PATH (or add it to your PATH).
+
+Example:
+```
+$ sudo ln -s /path/to/geckodriver /usr/local/bin/geckodriver
+```
+
+### Configuration: General
+
+Next change the value in `config.json` to the path of the `geckodriver` e.g
 ```
 {
     "DEFAULTS": {
@@ -76,7 +100,7 @@ Next change the value in `config.json` to the path of the geckodriver e.g
     },
     "WEBDRIVER": {
         "ENGINE": "firefox",
-        "PATH": "PATH TO geckodriver e.g C:\\Program Files\\geckodriver.exe"
+        "PATH": "/usr/local/bin/geckodriver"
     },
     "FILTER": [
         ....
@@ -85,15 +109,13 @@ Next change the value in `config.json` to the path of the geckodriver e.g
 }
 ```
 
-Make the Geckodriver executable
-```
-$ chmod +x /path/to/geckodriver
-```
-
-*I will try to implement the Chrome Webdriver as soon as possible*
+### Configuration: Images
 
 Next put at least one Image of the Person you want to find in the `known` folder.
-Supported Filetypes are: **jpg/JPG, jpeg/JPEG, png/PNG, bmp/BMP**
+
+Supported Filetypes are: **jpg/JPG, jpeg/JPEG, png/PNG, and bmp/BMP.**
+
+## Run
 
 Then run the program ;)
 ```
@@ -107,6 +129,9 @@ $ python3 eagle-eye.py -h
 
 *The ImageRaider Reverse Image Search can take some minutes 1-15 Minutes depending on the count of Images*
 
+## TODO
+
+* Implement the Chrome Webdriver
 
 ## Contributing
 You can always open a Pull Request
