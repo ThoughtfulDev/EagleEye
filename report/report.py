@@ -1,5 +1,6 @@
 from weasyprint import HTML
 import os
+import json
 
 def makeReport(name, links, preds, instnames, age):
     #sort
@@ -36,4 +37,21 @@ def makeReport(name, links, preds, instnames, age):
     doc = HTML('tmp.html')
     doc.write_pdf('{0}_Report.pdf'.format(name))
     os.remove('tmp.html')
+
+def makeJSONReport(name, links, preds, instnames, age, fn):
+    data = {}
+    links = sorted(links)
+    preds = sorted(preds)
+    instnames = sorted(instnames)
+
+    name = name.strip()
+    name = name.replace('%20', '-')
+
+    data['name'] = name
+    data['age'] = str(age)
+    data['social_urls'] = links
+    data['google_predictions'] = preds
+    data['instagram_names'] = instnames
+    with open(fn, 'w') as o:
+        json.dump(data, o)
 

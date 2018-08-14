@@ -19,9 +19,9 @@ def filterLink(link):
 
 class PictrievGrabber:
     def __init__(self):
-        console.section('Picture Age and Gender Detection')
+        console.section('Age Detection')
         console.task('Opening Webdriver')
-        self.driver = cfg.getWebDriver()
+        self.driver = None
         self.ages = []
         self.males = []
         self.females = []
@@ -38,6 +38,8 @@ class PictrievGrabber:
 
 
     def collectAges(self, img_url):
+        if not self.driver:
+            self.driver = cfg.getWebDriver()
         console.task('New Image: {0}'.format(img_url.strip()[:90]))  
         driver = self.driver
         driver.get("http://www.pictriev.com/?lang=en")
@@ -50,11 +52,15 @@ class PictrievGrabber:
         console.subtask('Searching for Image...')
         time.sleep(cfg.timeout() * 3)
         try:
-            age = driver.find_elements_by_css_selector('#age-gauge > svg:nth-child(1) > text:nth-child(6) > tspan:nth-child(1)')[0].text
-            if int(age) > 0:
-                self.ages.append(int(age))
+            age = driver.find_elements_by_css_selector('#age-gauge > svg:nth-child(1) > text:nth-child(6) > tspan:nth-child(1)')
         except:
-            pass
+            age = driver.find_elements_by_css_selector('#age-gauge > svg:nth-child(1) > text:nth-child(6) > tspan:nth-child(1)')
+        if len(age) == 1:
+            age = age[0].text
+        else:
+            age = 0
+        self.ages.append(int(age))
+
 
     def finish(self):
         self.driver.close()

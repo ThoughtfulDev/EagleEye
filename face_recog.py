@@ -85,6 +85,9 @@ class FaceRecog:
         valid_img = []
         valid_indexes = self.constructIndexes(label)
         for index in valid_indexes:
-            valid_url.append(self.profile_list[index])
-            valid_img.append(self.profile_img[index])
+            try:
+                valid_url.append(self.profile_list[index])
+                valid_img.append(self.profile_img[index])
+            except:
+                pass
         return valid_url, valid_img

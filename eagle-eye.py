@@ -15,7 +15,7 @@ from grabber.pictriev import PictrievGrabber
 from grabber.instagram import InstagramGrabber
 from face_recog import FaceRecog
 import subprocess, json, shutil
-from report.report import makeReport
+from report.report import makeReport, makeJSONReport
 
 
 def presentResult(predictions):
@@ -43,7 +43,8 @@ def parseInstaUsername(links):
         a = l[8:]
         a = a.split('/')
         if len(a) >= 2:
-            usernames.append(a[1])
+            if len(a[1]) >= 4:
+                usernames.append(a[1])
         else:
             console.subfailure('Error parsing {0}'.format(l))
     return usernames
@@ -51,6 +52,8 @@ def parseInstaUsername(links):
 
 def validateInstaUser(username, num_jitters):
     images = getInstaLinks(username)
+    if len(images) >= cfg.instaLimit():
+        images = images[:cfg.instaLimit()]
     r = FaceRecog(username, images, num_jitters=num_jitters)
     r.loadKnown(username)
     profile_links, _ = r.getValidLinksAndImg(username)
@@ -60,7 +63,7 @@ def getInstaLinks(username):
     instagrabber = InstagramGrabber(username)
     return instagrabber.getLinks()
 
-def main(skipFB=False, skipIR=False, skipY=False, FBUrls=[]):
+def main(skipFB=False, skipIR=False, skipY=False, FBUrls=[], jsonRep=None):
     if not skipFB:
         # collect user input
         console.prompt('Enter the persons name to find on FB: ')
@@ -147,6 +150,7 @@ def main(skipFB=False, skipIR=False, skipY=False, FBUrls=[]):
     raider_img_list = profile_imgs
     for v in validatedInstaNames:
         l = getInstaLinks(v)
+
         for li in l:
             raider_img_list.append(li)
 
@@ -185,16 +189,22 @@ def main(skipFB=False, skipIR=False, skipY=False, FBUrls=[]):
     if len(validatedInstaNames) > 0:
         for v in validatedInstaNames:
             l = getInstaLinks(v)
+            if len(l) >= cfg.instaLimit():
+                l = l[:cfg.instaLimit()]
             for li in l:
                 ageEstimator.collectAges(li)
         age = ageEstimator.finish()
     else:
         console.failure('No Instagram Images to upload...')
-        ageEstimator.finish()
+        #ageEstimator.finish()
         age = "Unknown"
 
-    console.section("Creating PDF Report")
-    makeReport(name, rev_links, predictions, validatedInstaNames, age)
+    if jsonRep:
+        console.section("Dumping JSON Report")
+        makeJSONReport(name, rev_links, predictions, validatedInstaNames, age, jsonRep)
+    else:
+        console.section("Creating PDF Report")
+        makeReport(name, rev_links, predictions, validatedInstaNames, age)
 
 
     p = os.path.join(tempfile.gettempdir(), 'imageraider')
@@ -212,11 +222,20 @@ if __name__ == "__main__":
     parser.add_argument('-sFB', '--skipfb', action='store_true', help='Skips the Facebook Search')
     parser.add_argument('-sIR', '--skipir', action='store_true', help='Skips the ImageRaider Reverse Search')
     #parser.add_argument('-sY', '--skipyandex', action='store_true', help='Skips the Yandex Reverse Search')
+    parser.add_argument('-json', '--json', nargs='?', help='Generates a json report. Specify a Filename')
     parser.add_argument('-fbList', 
                         '--facebookList', 
                         nargs='?', 
                         help="A file which contains Links to Facebook Profiles. '--skipfb' options must be enabled to use this" )
     args = parser.parse_args()
+
+    if args.json:
+        jsonRepFile = args.json
+        if os.path.isfile(jsonRepFile):
+            console.failure("File '{}' already exists".format(jsonRepFile))
+            sys.exit(-1)
+    else:
+        jsonRepFile = None
 
     if args.facebookList and args.skipfb:
         if os.path.isfile(args.facebookList):
@@ -225,11 +244,11 @@ if __name__ == "__main__":
             content = [x.strip() for x in content] 
             #TODO: fix yandex
             #main(skipFB=args.skipfb, skipIR=args.skipir, skipY=args.skipyandex, FBUrls=content)
-            main(skipFB=args.skipfb, skipIR=args.skipir, skipY=None, FBUrls=content)
+            main(skipFB=args.skipfb, skipIR=args.skipir, skipY=None, FBUrls=content, jsonRep=jsonRepFile)
         else:
             console.failure("File '{}' does not exist".format(args.facebookList))
             sys.exit(-1)
     else:
         #TODO: fix yandex
         #main(skipFB=args.skipfb, skipIR=args.skipir, skipY=args.skipyandex, FBUrls=[])
-        main(skipFB=args.skipfb, skipIR=args.skipir, skipY=None, FBUrls=[])
+        main(skipFB=args.skipfb, skipIR=args.skipir, skipY=None, FBUrls=[], jsonRep=jsonRepFile)
