@@ -140,6 +140,9 @@ OR
 
 [![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/supergirl)
 
+## Publications/Mentions
+[Eagle Eye: Search engine for Facebook, Instagram, Twitter](https://www.rebvn.com/2018/09/eagle-eye-cong-cu-tim-kiem-tai-khoan-mang-xa-hoi.html)(In Vietnamese)
+
 
 ## License
 ```
