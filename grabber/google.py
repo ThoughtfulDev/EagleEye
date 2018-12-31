@@ -33,7 +33,8 @@ class GoogleGrabber:
         driver = self.driver
         driver.get("https://www.google.com/imghp")
         console.subtask('Inserting Image URL')
-        elems = driver.find_elements_by_xpath('//*[@id="qbi"]')[0]
+        elems = driver.find_elements_by_xpath('/html/body/div/div[3]/div[3]/form/div[2]/div/div[1]/div/div[2]/div')[0]
+        #elems = driver.find_elements_by_xpath('//*[@id="qbi"]')[0]
         elems.click()
         time.sleep(1)
         input = driver.find_elements_by_xpath('//*[@id="qbui"]')[0]
@@ -44,7 +45,7 @@ class GoogleGrabber:
         time.sleep(cfg.timeout() * 2)
         pred_error = False
         try:
-            pred = driver.find_element_by_xpath("/html/body/div[5]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
+            pred = driver.find_element_by_xpath("/html/body/div[6]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
         except NoSuchElementException:
             console.subfailure('No Prediction given sry...')
             pred = None
@@ -52,7 +53,7 @@ class GoogleGrabber:
         except BrokenPipeError:
             #just try again...
             try:
-                pred = driver.find_element_by_xpath("/html/body/div[5]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
+                pred = driver.find_element_by_xpath("/html/body/div[6]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
             except NoSuchElementException:
                 console.subfailure('Broken pipe Error. This is not a Problem...moving on!')
                 console.subfailure('No Prediction given sry...')
@@ -64,12 +65,16 @@ class GoogleGrabber:
         self.predictions.append(pred)
     
         try:
-            link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
+            
+            link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
+            #link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
         except BrokenPipeError:
-            link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
+            link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
+            #link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
         console.subtask("Collecting Links...(Page 1)")
         for link in link_name:
-            href = link.get_attribute('href')
+            #href = link.get_attribute('href')
+            href = link.text
             if filterLink(href):
                 console.subtask('Added {0}'.format(href))
                 self.links.append(href)
@@ -82,9 +87,9 @@ class GoogleGrabber:
                 time.sleep(cfg.timeout())
                 console.subtask("Collecting Links...(Page {0})".format(num))
                 try:  
-                    link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
+                    link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
                 except BrokenPipeError:
-                    link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
+                    link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
                 for link in link_name:
                     href = link.get_attribute('href')
                     if filterLink(href):
@@ -106,7 +111,7 @@ class GoogleGrabber:
         for p in pathlist:
             str_p = str(p)
             driver.get("https://www.google.com/imghp")
-            elems = driver.find_elements_by_xpath('//*[@id="qbi"]')[0]
+            elems = driver.find_elements_by_xpath('/html/body/div/div[3]/div[3]/form/div[2]/div/div[1]/div/div[2]/div')[0]
             elems.click()
             time.sleep(1)
             elems = driver.find_element_by_xpath('/html/body/div[1]/div[3]/div[3]/div/div[2]/form/div[1]/div/a')
@@ -139,9 +144,9 @@ class GoogleGrabber:
                 pred = pred.text       
             self.predictions.append(pred)
             try:
-                link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
+                link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
             except BrokenPipeError:
-                link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
+                link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
             console.subtask("Collecting Links...(Page 1)")
             for link in link_name:
                 href = link.get_attribute('href')
@@ -157,9 +162,9 @@ class GoogleGrabber:
                     time.sleep(cfg.timeout())
                     console.subtask("Collecting Links...(Page {0})".format(num))
                     try:   
-                        link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
+                        link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
                     except BrokenPipeError:
-                        link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
+                        link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
                     for link in link_name:
                         href = link.get_attribute('href')
                         if filterLink(href):
