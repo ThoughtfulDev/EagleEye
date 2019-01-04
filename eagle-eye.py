@@ -10,7 +10,6 @@ import utils.config as cfg
 from grabber.facebook import FBGrabber, FBProfileGrabber
 from grabber.google import GoogleGrabber
 from grabber.yandex import YandexGrabber
-from grabber.imageraider import ImageRaiderGrabber
 from grabber.pictriev import PictrievGrabber
 from grabber.instagram import InstagramGrabber
 from face_recog import FaceRecog
@@ -63,7 +62,7 @@ def getInstaLinks(username):
     instagrabber = InstagramGrabber(username)
     return instagrabber.getLinks()
 
-def main(skipFB=False, skipIR=False, skipY=False, FBUrls=[], jsonRep=None):
+def main(skipFB=False, skipY=False, FBUrls=[], jsonRep=None):
     if not skipFB:
         # collect user input
         console.prompt('Enter the persons name to find on FB: ')
@@ -157,15 +156,7 @@ def main(skipFB=False, skipIR=False, skipY=False, FBUrls=[], jsonRep=None):
     if len(raider_img_list) <= 0:
         console.failure('No Links found...')
     else:
-        if not skipIR:
-            raider = ImageRaiderGrabber()
-            raider.insertImageLinks(raider_img_list)
-            raider.downloadCSV()
-            raider_links = raider.processCSV()
-            for raider_link in raider_links:
-                rev_links.append(raider_link)
-        else:
-            console.task('Skipping ImageRaider Search')
+        console.task('RIP Imageraider')
 
 
     rev_links = list(set(rev_links))
@@ -220,7 +211,7 @@ if __name__ == "__main__":
     console.banner()
     parser = argparse.ArgumentParser()
     parser.add_argument('-sFB', '--skipfb', action='store_true', help='Skips the Facebook Search')
-    parser.add_argument('-sIR', '--skipir', action='store_true', help='Skips the ImageRaider Reverse Search')
+    #parser.add_argument('-sIR', '--skipir', action='store_true', help='Skips the ImageRaider Reverse Search')
     #parser.add_argument('-sY', '--skipyandex', action='store_true', help='Skips the Yandex Reverse Search')
     parser.add_argument('-json', '--json', nargs='?', help='Generates a json report. Specify a Filename')
     parser.add_argument('-fbList', 
@@ -243,12 +234,12 @@ if __name__ == "__main__":
                 content = f.readlines()
             content = [x.strip() for x in content] 
             #TODO: fix yandex
-            #main(skipFB=args.skipfb, skipIR=args.skipir, skipY=args.skipyandex, FBUrls=content)
-            main(skipFB=args.skipfb, skipIR=args.skipir, skipY=None, FBUrls=content, jsonRep=jsonRepFile)
+            #main(skipFB=args.skipfb, skipY=args.skipyandex, FBUrls=content)
+            main(skipFB=args.skipfb, skipY=None, FBUrls=content, jsonRep=jsonRepFile)
         else:
             console.failure("File '{}' does not exist".format(args.facebookList))
             sys.exit(-1)
     else:
         #TODO: fix yandex
-        #main(skipFB=args.skipfb, skipIR=args.skipir, skipY=args.skipyandex, FBUrls=[])
-        main(skipFB=args.skipfb, skipIR=args.skipir, skipY=None, FBUrls=[], jsonRep=jsonRepFile)
+        #main(skipFB=args.skipfb, skipY=args.skipyandex, FBUrls=[])
+        main(skipFB=args.skipfb, skipY=None, FBUrls=[], jsonRep=jsonRepFile)
