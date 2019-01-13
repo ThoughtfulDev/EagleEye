@@ -14,7 +14,7 @@ import utils.console as console
 def filterLink(link):
     filters = cfg.google_filter()
     for f in filters:
-        if f in link:
+        if link != None and f in link:
             return True
     return False
 
@@ -95,7 +95,7 @@ class GoogleGrabber:
                 except BrokenPipeError:
                     link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
                 for link in link_name:
-                    href = link.get_attribute('href')
+                    href = link.text
                     if filterLink(href):
                         console.subtask('Added {0}'.format(href))
                         self.links.append(href)
@@ -157,7 +157,7 @@ class GoogleGrabber:
             else:
                 for link in link_name:
                     if link != None:
-                        href = link.get_attribute('href')
+                        href = link.text
                         if filterLink(href):
                             console.subtask('Added {0}'.format(href))
                             self.links.append(href)
@@ -174,7 +174,7 @@ class GoogleGrabber:
                     except BrokenPipeError:
                         link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
                     for link in link_name:
-                        href = link.get_attribute('href')
+                        href = link.text
                         if filterLink(href):
                             console.subtask('Added {0}'.format(href))
                             self.links.append(href)
