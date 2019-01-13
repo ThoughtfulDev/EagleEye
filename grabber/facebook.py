@@ -22,12 +22,15 @@ class FBGrabber:
         profile_img_links = driver.find_elements_by_xpath("//a[@class='_2ial']")
         console.subtask('Collecting Image URLs...(Page 1)')
 
-        for e in profile_img_links:
-            href = e.get_attribute("href")
-            image = e.find_element_by_tag_name("img")
-            img_src = image.get_attribute("src")
-            self.profile_list.append(href)
-            self.profile_img.append(img_src)
+        if len(profile_img_links) <= 0:
+            console.subfailure('No FB Links found')
+        else:
+            for e in profile_img_links:
+                href = e.get_attribute("href")
+                image = e.find_element_by_tag_name("img")
+                img_src = image.get_attribute("src")
+                self.profile_list.append(href)
+                self.profile_img.append(img_src)
         
         pages = driver.find_elements_by_xpath("//a")
         pages_links = []

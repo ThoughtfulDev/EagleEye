@@ -72,12 +72,16 @@ class GoogleGrabber:
             link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
             #link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
         console.subtask("Collecting Links...(Page 1)")
-        for link in link_name:
-            #href = link.get_attribute('href')
-            href = link.text
-            if filterLink(href):
-                console.subtask('Added {0}'.format(href))
-                self.links.append(href)
+        if len(link_name) <= 0: 
+            console.subfailure('No Links found')
+        else:
+            for link in link_name:
+                #href = link.get_attribute('href')
+                if link != None:
+                    href = link.text
+                    if filterLink(href):
+                        console.subtask('Added {0}'.format(href))
+                        self.links.append(href)
 
         for num in range(2, self.max_pages+1):
             console.subtask("Switching to Page {0}".format(num))
@@ -148,11 +152,15 @@ class GoogleGrabber:
             except BrokenPipeError:
                 link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
             console.subtask("Collecting Links...(Page 1)")
-            for link in link_name:
-                href = link.get_attribute('href')
-                if filterLink(href):
-                    console.subtask('Added {0}'.format(href))
-                    self.links.append(href)
+            if len(link_name) <= 0: 
+                console.subfailure('No Links found')
+            else:
+                for link in link_name:
+                    if link != None:
+                        href = link.get_attribute('href')
+                        if filterLink(href):
+                            console.subtask('Added {0}'.format(href))
+                            self.links.append(href)
             
             for num in range(2, self.max_pages+1):
                 console.subtask("Switching to Page {0}".format(num))
