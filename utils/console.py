@@ -2,7 +2,7 @@ from termcolor import colored
 import os
 import getpass
 
-VER = "0.1"
+VER = "0.2"
 
 def banner():
     logo = """

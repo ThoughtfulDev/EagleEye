@@ -123,9 +123,7 @@ def main(skipFB=False, skipY=False, FBUrls=[], jsonRep=None):
     g.collectLinksLocal()
     rev_links, predictions = g.finish()
 
-    #TODO: Fix yandex search
-    #if not skipY:
-    if False:
+    if not skipY:
         yandex = YandexGrabber()
         for img in profile_imgs:
             yandex.collectLinks(img)
@@ -212,7 +210,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-sFB', '--skipfb', action='store_true', help='Skips the Facebook Search')
     #parser.add_argument('-sIR', '--skipir', action='store_true', help='Skips the ImageRaider Reverse Search')
-    #parser.add_argument('-sY', '--skipyandex', action='store_true', help='Skips the Yandex Reverse Search')
+    parser.add_argument('-sY', '--skipyandex', action='store_true', help='Skips the Yandex Reverse Search')
     parser.add_argument('-json', '--json', nargs='?', help='Generates a json report. Specify a Filename')
     parser.add_argument('-fbList', 
                         '--facebookList', 
@@ -233,13 +231,9 @@ if __name__ == "__main__":
             with open(args.facebookList, 'r') as f:
                 content = f.readlines()
             content = [x.strip() for x in content] 
-            #TODO: fix yandex
-            #main(skipFB=args.skipfb, skipY=args.skipyandex, FBUrls=content)
-            main(skipFB=args.skipfb, skipY=None, FBUrls=content, jsonRep=jsonRepFile)
+            main(skipFB=args.skipfb, skipY=args.skipyandex, FBUrls=content, jsonRep=jsonRepFile)
         else:
             console.failure("File '{}' does not exist".format(args.facebookList))
             sys.exit(-1)
     else:
-        #TODO: fix yandex
-        #main(skipFB=args.skipfb, skipY=args.skipyandex, FBUrls=[])
-        main(skipFB=args.skipfb, skipY=None, FBUrls=[], jsonRep=jsonRepFile)
+        main(skipFB=args.skipfb, skipY=args.skipyandex, FBUrls=[], jsonRep=jsonRepFile)

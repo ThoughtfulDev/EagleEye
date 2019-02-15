@@ -2,15 +2,27 @@
 ![OS Linux](https://img.shields.io/badge/Supported%20OS-Linux-yellow.svg)
 ![Lets stalk](https://img.shields.io/badge/Stalkermode-Activated-red.svg)
 ```
-███████╗ █████╗  ██████╗ ██╗     ███████╗   ███████╗██╗   ██╗███████╗
-██╔════╝██╔══██╗██╔════╝ ██║     ██╔════╝   ██╔════╝╚██╗ ██╔╝██╔════╝
-█████╗  ███████║██║  ███╗██║     █████╗     █████╗   ╚████╔╝ █████╗  
-██╔══╝  ██╔══██║██║   ██║██║     ██╔══╝     ██╔══╝    ╚██╔╝  ██╔══╝  
-███████╗██║  ██║╚██████╔╝███████╗███████╗   ███████╗   ██║   ███████╗
-╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝   ╚══════╝   ╚═╝   ╚══════╝
-                    Jerry Shaw, you have been activated    
-
+███████╗ █████╗  ██████╗ ██╗     ███████╗       ███████╗██╗   ██╗███████╗
+██╔════╝██╔══██╗██╔════╝ ██║     ██╔════╝       ██╔════╝╚██╗ ██╔╝██╔════╝
+█████╗  ███████║██║  ███╗██║     █████╗ Version █████╗   ╚████╔╝ █████╗  
+██╔══╝  ██╔══██║██║   ██║██║     ██╔══╝   0.2   ██╔══╝    ╚██╔╝  ██╔══╝  
+███████╗██║  ██║╚██████╔╝███████╗███████╗       ███████╗   ██║   ███████╗
+╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝       ╚══════╝   ╚═╝   ╚══════╝
+                Jerry Shaw, you have been activated  
+                                                                 
 Find your friends Social Media Profiles with ease     
+
+usage: eagle-eye.py [-h] [-sFB] [-sY] [-json [JSON]] [-fbList [FACEBOOKLIST]]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -sFB, --skipfb        Skips the Facebook Search
+  -sY, --skipyandex     Skips the Yandex Reverse Search
+  -json [JSON], --json [JSON]
+                        Generates a json report. Specify a Filename
+  -fbList [FACEBOOKLIST], --facebookList [FACEBOOKLIST]
+                        A file which contains Links to Facebook Profiles. '--
+                        skipfb' options must be enabled to use this    
 ```
 
 **This only works if their Facebook Profile is public.**
