@@ -9,3 +9,4 @@ known/*.png
 grabber/__pycache__
 report/__pycache__
 utils/__pycache__
+eagleeye_web/node_modules
