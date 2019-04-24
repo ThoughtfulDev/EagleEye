@@ -6,7 +6,7 @@
           <vue-dropzone
             ref="myVueDropzone"
             id="dropzone"
-            :options="dropzoneOptions"
+            :options="dropzoneOptions" 
           >Drop your image here</vue-dropzone>
         </h3>
       </v-flex>
