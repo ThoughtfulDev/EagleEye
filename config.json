@@ -13,5 +13,6 @@
         "pinterest.com",
         "plus.google.com"
     ],
-    "INSTA_VALIDATION_MAX_IMAGES": "5"
+    "INSTA_VALIDATION_MAX_IMAGES": "5",
+    "JITTERS": "70"
 }

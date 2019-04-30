@@ -62,20 +62,29 @@ def getInstaLinks(username):
     instagrabber = InstagramGrabber(username)
     return instagrabber.getLinks()
 
-def main(skipFB=False, skipY=False, FBUrls=[], jsonRep=None):
+def main(skipFB=False, skipY=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=None):
     if not skipFB:
         # collect user input
-        console.prompt('Enter the persons name to find on FB: ')
-        name = input('')
-        while not name:
+        if dockerMode:
+            console.section("Running in DOCKER MODE")
+            name = dockerName
+        else:
             console.prompt('Enter the persons name to find on FB: ')
             name = input('')
+            while not name:
+                console.prompt('Enter the persons name to find on FB: ')
+                name = input('')
     else:
         console.task('Skipping FB Search')
         name = "Unknown"
 
-    console.prompt('How many jitters, higher is better [max 100] (default=70): ')
-    num_jitters = input('')
+    
+    if dockerMode:
+        console.task('Skipping jitters since specified in config.json')
+        num_jitters = cfg.jitters()
+    else:
+        console.prompt('How many jitters, higher is better [max 100] (default=70): ')
+        num_jitters = input('')
     if not num_jitters:
         console.task('Settings jitters to 70')
         num_jitters = 70
@@ -211,12 +220,24 @@ if __name__ == "__main__":
     parser.add_argument('-sFB', '--skipfb', action='store_true', help='Skips the Facebook Search')
     #parser.add_argument('-sIR', '--skipir', action='store_true', help='Skips the ImageRaider Reverse Search')
     parser.add_argument('-sY', '--skipyandex', action='store_true', help='Skips the Yandex Reverse Search')
+    parser.add_argument('-d', '--docker', action='store_true', help='Set this flag if run in docker mode')
+    parser.add_argument('-n', '--name', nargs='?', help='Specify the persons name. Only active with the --docker flag')
     parser.add_argument('-json', '--json', nargs='?', help='Generates a json report. Specify a Filename')
     parser.add_argument('-fbList', 
                         '--facebookList', 
                         nargs='?', 
                         help="A file which contains Links to Facebook Profiles. '--skipfb' options must be enabled to use this" )
     args = parser.parse_args()
+
+    if args.docker:
+        aDocker = args.docker
+        if args.name:
+            aName = args.name
+        else:
+            console.failure("Please supply a name using the --name flag")
+            sys.exit(-2)
+    else:
+        aDocker = False
 
     if args.json:
         jsonRepFile = args.json
@@ -231,9 +252,9 @@ if __name__ == "__main__":
             with open(args.facebookList, 'r') as f:
                 content = f.readlines()
             content = [x.strip() for x in content] 
-            main(skipFB=args.skipfb, skipY=args.skipyandex, FBUrls=content, jsonRep=jsonRepFile)
+            main(skipFB=args.skipfb, skipY=args.skipyandex, FBUrls=content, jsonRep=jsonRepFile, dockerMode=aDocker, dockerName=aName)
         else:
             console.failure("File '{}' does not exist".format(args.facebookList))
             sys.exit(-1)
     else:
-        main(skipFB=args.skipfb, skipY=args.skipyandex, FBUrls=[], jsonRep=jsonRepFile)
+        main(skipFB=args.skipfb, skipY=args.skipyandex, FBUrls=[], jsonRep=jsonRepFile, dockerMode=aDocker, dockerName=aName)

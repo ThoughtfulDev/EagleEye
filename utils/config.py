@@ -22,6 +22,9 @@ def google_filter():
 def instaLimit():
     return int(cfg['INSTA_VALIDATION_MAX_IMAGES'])
 
+def jitters():
+    return int(cfg['JITTERS'])
+
 def getWebDriver():
     if not os.path.isfile(cfg['WEBDRIVER']['PATH']):
         print("{0} does not exist - install a webdriver".format(cfg['WEBDRIVER']['PATH']))
