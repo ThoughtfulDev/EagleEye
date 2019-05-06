@@ -8,21 +8,24 @@
 ██╔══╝  ██╔══██║██║   ██║██║     ██╔══╝   0.2   ██╔══╝    ╚██╔╝  ██╔══╝  
 ███████╗██║  ██║╚██████╔╝███████╗███████╗       ███████╗   ██║   ███████╗
 ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝       ╚══════╝   ╚═╝   ╚══════╝
-                Jerry Shaw, you have been activated  
-                                                                 
-Find your friends Social Media Profiles with ease     
-
-usage: eagle-eye.py [-h] [-sFB] [-sY] [-json [JSON]] [-fbList [FACEBOOKLIST]]
+                thoughtfuldev, you have been activated                                                                   
+    
+usage: eagle-eye.py [-h] [-sFB] [-sY] [-d] [-n [NAME]] [-json [JSON]]
+                    [-fbList [FACEBOOKLIST]]
 
 optional arguments:
   -h, --help            show this help message and exit
   -sFB, --skipfb        Skips the Facebook Search
   -sY, --skipyandex     Skips the Yandex Reverse Search
+  -d, --docker          Set this flag if run in docker mode
+  -n [NAME], --name [NAME]
+                        Specify the persons name. Only active with the
+                        --docker flag
   -json [JSON], --json [JSON]
                         Generates a json report. Specify a Filename
   -fbList [FACEBOOKLIST], --facebookList [FACEBOOKLIST]
                         A file which contains Links to Facebook Profiles. '--
-                        skipfb' options must be enabled to use this    
+                        skipfb' options must be enabled to use this
 ```
 
 **This only works if their Facebook Profile is public.**
@@ -48,12 +51,39 @@ In the end you get a PDF Report. :)
 
 ## How to use it
 
-### Automated Prequisites Installation
+### Docker (Preferred)
+**Make sure that you have docker installed**
+**Make sure that you use a LINUX distribution as the host**
+1. Clone the Repository
+
+   ``` $ git clone https://github.com/ThoughtfulDev/EagleEye ```
+2. ```
+   $ cd EagleEye
+   $ sudo docker build -t eagle-eye - < dockerfile
+   ```
+3. Now create a `known` folder and a `result` folder anywhere on your PC.
+4. Put the images of the known person in the known folder.
+5. Change the name of the person your are searching for in `entry.sh`
+6. Change the path to `/result/` in `entry.sh` to the one created in Step 3.
+7. Start the container. **Make sure to edit the paths**:
+```
+sudo docker run -t --net=host --env="DISPLAY" \
+                           --volume="$HOME/.Xauthority:/root/.Xauthority:rw"  \
+                           -v  /path/to/known:/EagleEye/known \
+                           -v  /path/to/result:/result \
+                           -v /path/to/EagleEye/Repository/entry.sh:/entry.sh \
+                           eagle-eye
+
+```
+
+The result should now be in `/path/to/result`
+
+### Automated Prequisites Installation (If Docker doesn't work)
 ```
 wget https://raw.githubusercontent.com/ThoughtfulDev/EagleEye/master/install.sh && chmod +x install.sh && ./install.sh
 ```
 
-### Manual Prequisites Installation
+### Manual Prequisites Installation (If you are hardcore)
 
 For **Debian** based Distros
 ```
