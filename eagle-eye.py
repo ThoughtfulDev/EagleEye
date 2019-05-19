@@ -237,6 +237,7 @@ if __name__ == "__main__":
             console.failure("Please supply a name using the --name flag")
             sys.exit(-2)
     else:
+        aName = None
         aDocker = False
 
     if args.json:
