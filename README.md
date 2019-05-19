@@ -64,8 +64,7 @@ In the end you get a PDF Report. :)
 3. Now create a `known` folder and a `result` folder anywhere on your PC.
 4. Put the images of the known person in the known folder.
 5. Change the name of the person your are searching for in `entry.sh`
-6. Change the path to `/result/` in `entry.sh` to the one created in Step 3.
-7. Start the container. **Make sure to edit the paths**:
+6. Start the container. **Make sure to edit the paths**:
 ```
 sudo docker run -t --net=host --env="DISPLAY" \
                            --volume="$HOME/.Xauthority:/root/.Xauthority:rw"  \
