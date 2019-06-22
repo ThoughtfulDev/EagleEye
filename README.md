@@ -1,57 +1,58 @@
-![Python 3.5](https://img.shields.io/badge/Python-3.6%2B-blue.svg)
-![OS Linux](https://img.shields.io/badge/Supported%20OS-Linux-yellow.svg)
-![Lets stalk](https://img.shields.io/badge/Stalkermode-Activated-red.svg)
 ```
 ███████╗ █████╗  ██████╗ ██╗     ███████╗       ███████╗██╗   ██╗███████╗
 ██╔════╝██╔══██╗██╔════╝ ██║     ██╔════╝       ██╔════╝╚██╗ ██╔╝██╔════╝
-█████╗  ███████║██║  ███╗██║     █████╗ Version █████╗   ╚████╔╝ █████╗  
-██╔══╝  ██╔══██║██║   ██║██║     ██╔══╝   0.2   ██╔══╝    ╚██╔╝  ██╔══╝  
+█████╗  ███████║██║  ███╗██║     █████╗         █████╗   ╚████╔╝ █████╗  
+██╔══╝  ██╔══██║██║   ██║██║     ██╔══╝         ██╔══╝    ╚██╔╝  ██╔══╝  
 ███████╗██║  ██║╚██████╔╝███████╗███████╗       ███████╗   ██║   ███████╗
 ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝       ╚══════╝   ╚═╝   ╚══════╝
-                thoughtfuldev, you have been activated                                                                   
-    
-usage: eagle-eye.py [-h] [-sFB] [-sY] [-d] [-n [NAME]] [-json [JSON]]
-                    [-fbList [FACEBOOKLIST]]
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -sFB, --skipfb        Skips the Facebook Search
-  -sY, --skipyandex     Skips the Yandex Reverse Search
-  -d, --docker          Set this flag if run in docker mode
-  -n [NAME], --name [NAME]
-                        Specify the persons name. Only active with the
-                        --docker flag
-  -json [JSON], --json [JSON]
-                        Generates a json report. Specify a Filename
-  -fbList [FACEBOOKLIST], --facebookList [FACEBOOKLIST]
-                        A file which contains Links to Facebook Profiles. '--
-                        skipfb' options must be enabled to use this
 ```
 
-**This only works if their Facebook Profile is public.**
+<div align="center">
 
-## What does this do?
-You have at least one image of the person you are looking for and a clue about their name. You enter this data into EagleEye and it tries to find Instagram, Youtube, Facebook, and Twitter Profiles of this person.
+  ![Python 3.5](https://img.shields.io/badge/Python-3.6%2B-blue.svg)
+![OS Linux](https://img.shields.io/badge/Supported%20OS-Linux-yellow.svg)
+![Lets stalk](https://img.shields.io/badge/Stalkermode-Activated-red.svg)
 
-## Screenshots?
-[Example Report](https://github.com/ThoughtfulDev/EagleEye/blob/master/Example.pdf) (Used one Image of Emeraude Toubia)
+</div>
 
-![1](https://thoughtful-dev.com/projects/eagle-eye/1.png)  
-![2](https://thoughtful-dev.com/projects/eagle-eye/2.png)  
-![3](https://thoughtful-dev.com/projects/eagle-eye/3.png)            
+---
+
+<p align="center"> You have at least one image of the person you are looking for and a clue about their name. 
+<br>
+You enter this data into EagleEye and it tries to find Instagram, Youtube, Facebook, and Twitter Profiles of this person.
+    <br> 
+</p>
+
+## 📝 Table of Contents
+- [Getting Started](#getting_started)
+- [Usage](#usage)
+- [Built Using](#built_using)
+- [TODO](#todo)
+- [Contributing](../CONTRIBUTING.md)
+- [Authors](#authors)
+- [Acknowledgments](#acknowledgement)
 
 
-## How does it work?
-You give EagleEye a name and at least one photo. It searches this name in Facebook and performs Facial Recognition to find the right Facebook Profile.
-Afterwards it uses Google and ImageRaider Reverse Image Search to find other Social Media Profiles.
+## 🏁 Getting Started <a name = "getting_started"></a>
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-If an Instagram Profile was found it will be verified by comparing a provided photo of the person to some of Instagram Pictures.
+### Prerequisites
 
-In the end you get a PDF Report. :)
+- A system with a x-server installed (Linux)
+- Firefox installed
 
-## How to use it
+#### When using docker
+- Only docker is required
 
-### Docker (Preferred)
+#### When you dont use docker
+- Python 3.6 or higher
+- Pythons pip
+
+
+### Installing
+
+#### Docker (Preferred)
 **Make sure that you have docker installed**
 **Make sure that you use a LINUX distribution as the host**
 1. Clone the Repository
@@ -77,12 +78,16 @@ sudo docker run -t --net=host --env="DISPLAY" \
 
 The result should now be in `/path/to/result`
 
-### Automated Prequisites Installation (If Docker doesn't work)
+---
+
+#### Automated Prequisites Installation (If Docker doesn't work)
 ```
 wget https://raw.githubusercontent.com/ThoughtfulDev/EagleEye/master/install.sh && chmod +x install.sh && ./install.sh
 ```
 
-### Manual Prequisites Installation (If you are hardcore)
+---
+
+#### Manual Prequisites Installation (If you are hardcore)
 
 For **Debian** based Distros
 ```
@@ -103,17 +108,8 @@ $ cd EagleEye && sudo pip3 install -r requirements.txt
 $ sudo pip3 install --upgrade beautifulsoup4 html5lib spry
 ```
 
-### Firefox installation
 
-Regardless of which option you choose make sure that you have Firefox installed.
-
-If you are running a desktop version of Debian or Arch you likely have this installed already.
-
-If you are not running a desktop version you may need to manually install.
-
-### Geckodriver
-
-Once Firefox is installed, download the [latest release](https://github.com/mozilla/geckodriver/releases/latest) of the Geckodriver for you Architecture.
+If Firefox is installed, download the [latest release](https://github.com/mozilla/geckodriver/releases/latest) of the Geckodriver for you Architecture.
 
 **If you get a `broken pipe` Error use Geckodriver Version 0.19.1.**
 
@@ -131,9 +127,12 @@ Example:
 $ sudo ln -s /path/to/geckodriver /usr/local/bin/geckodriver
 ```
 
+
+## 🎈 Usage <a name="usage"></a>
+
 ### Configuration: General
 
-Next change the value in `config.json` to the path of the `geckodriver` e.g
+Change the value in `config.json` to the path of the `geckodriver` e.g
 ```
 {
     "DEFAULTS": {
@@ -152,11 +151,11 @@ Next change the value in `config.json` to the path of the `geckodriver` e.g
 
 ### Configuration: Images
 
-Next put at least one Image of the Person you want to find in the `known` folder.
+Put at least one Image of the Person you want to find in the `known` folder.
 
 Supported Filetypes are: **jpg/JPG, jpeg/JPEG, png/PNG, and bmp/BMP.**
 
-## Run
+### Run
 
 Then run the program ;)
 ```
@@ -170,34 +169,18 @@ $ python3 eagle-eye.py -h
 
 *The ImageRaider Reverse Image Search can take some minutes 1-15 Minutes depending on the count of Images*
 
-## TODO
 
+## TODO <a name = "todo"></a>
 * Implement the Chrome Webdriver
 
-## Contributing
-You can always open a Pull Request
+## ⛏️ Built Using <a name = "built_using"></a>
+- [Python](https://www.python.org/) - Language
+- [dlib](http://dlib.net/) - Face detection
+- [face_recognition](https://github.com/ageitgey/face_recognition) - dlib python api
+- [Selenium](https://www.seleniumhq.org/) - WebBrowser automation
 
-OR
+## ✍️ Authors <a name = "authors"></a>
+- [@ThoughtfulDev](https://github.com/ThoughtfulDev) - Idea & Work
 
-[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/supergirl)
-
-## Publications/Mentions
-[Eagle Eye: Search engine for Facebook, Instagram, Twitter](https://www.rebvn.com/2018/09/eagle-eye-cong-cu-tim-kiem-tai-khoan-mang-xa-hoi.html)(In Vietnamese)
-
-
-## License
-```
-            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-                    Version 2, December 2004
-
- Copyright (C) 2018 ThoughtfulDev
-
- Everyone is permitted to copy and distribute verbatim or modified
- copies of this license document, and changing it is allowed as long
- as the name is changed.
-
-            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
-
-  1. You just DO WHAT THE FUCK YOU WANT TO.
-```
+## 🎉 Acknowledgements <a name = "acknowledgement"></a>
+- The movie Eagle Eye
