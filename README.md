@@ -29,7 +29,6 @@ You enter this data into EagleEye and it tries to find Instagram, Youtube, Faceb
 - [Usage](#usage)
 - [Built Using](#built_using)
 - [TODO](#todo)
-- [Contributing](../CONTRIBUTING.md)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgement)
 
