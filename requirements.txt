@@ -1,4 +1,3 @@
-urllib3
 termcolor
 opencv-python
 selenium
