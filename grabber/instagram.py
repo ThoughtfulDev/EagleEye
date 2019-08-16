@@ -9,7 +9,7 @@ class InstagramGrabber:
     def getLinks(self):
         session = HTMLSession()
         r = session.get('https://instagram.com/' + self.username)
-        l = r.html.find('body > script:nth-child(2)')[0].text
+        l = r.html.find('body > script:nth-child(6)')[0].text
         json_str = l[21:]
         json_str = json_str[:-1]
         json_parsed = json.loads(json_str)
@@ -23,7 +23,7 @@ class InstagramGrabber:
             links = []
             for sc in shortcodes:
                 r = session.get('https://instagram.com/p/' + sc + '/?taken-by=' + self.username)
-                img = r.html.find('head > meta[property="og:image"]')
+                img = r.html.find('meta[property="og:image"]')
                 if len(img) > 0:
                     img = img[0]
                     links.append(img.attrs['content'])

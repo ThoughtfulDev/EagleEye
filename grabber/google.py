@@ -20,6 +20,11 @@ def filterLink(link):
 
 
 class GoogleGrabber:
+
+    PHOTO_XPATH = "/html/body/div[1]/div[4]/div[2]/form/div[2]/div/div[1]/div/div[2]/div/span"
+    PHOTO_UPLOAD_XPATH = "/html/body/div[1]/div[4]/div[2]/div/div[2]/form/div[1]/div/a"
+    PRED_XPATH = "/html/body/div[6]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a"
+
     def __init__(self):
         self.max_pages = cfg.google_img_pages()
         console.section('Google Reverse Image Search')
@@ -33,8 +38,7 @@ class GoogleGrabber:
         driver = self.driver
         driver.get("https://www.google.com/imghp")
         console.subtask('Inserting Image URL')
-        elems = driver.find_elements_by_xpath('/html/body/div/div[3]/div[3]/form/div[2]/div/div[1]/div/div[2]/div')[0]
-        #elems = driver.find_elements_by_xpath('//*[@id="qbi"]')[0]
+        elems = driver.find_elements_by_xpath(self.PHOTO_XPATH)[0]
         elems.click()
         time.sleep(1)
         input = driver.find_elements_by_xpath('//*[@id="qbui"]')[0]
@@ -45,7 +49,7 @@ class GoogleGrabber:
         time.sleep(cfg.timeout() * 2)
         pred_error = False
         try:
-            pred = driver.find_element_by_xpath("/html/body/div[6]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
+            pred = driver.find_element_by_xpath(self.PRED_XPATH)
         except NoSuchElementException:
             console.subfailure('No Prediction given sry...')
             pred = None
@@ -53,7 +57,7 @@ class GoogleGrabber:
         except BrokenPipeError:
             #just try again...
             try:
-                pred = driver.find_element_by_xpath("/html/body/div[6]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
+                pred = driver.find_element_by_xpath(self.PRED_XPATH)
             except NoSuchElementException:
                 console.subfailure('Broken pipe Error. This is not a Problem...moving on!')
                 console.subfailure('No Prediction given sry...')
@@ -115,10 +119,10 @@ class GoogleGrabber:
         for p in pathlist:
             str_p = str(p)
             driver.get("https://www.google.com/imghp")
-            elems = driver.find_elements_by_xpath('/html/body/div/div[3]/div[3]/form/div[2]/div/div[1]/div/div[2]/div')[0]
+            elems = driver.find_elements_by_xpath(self.PHOTO_XPATH)[0]
             elems.click()
             time.sleep(1)
-            elems = driver.find_element_by_xpath('/html/body/div[1]/div[3]/div[3]/div/div[2]/form/div[1]/div/a')
+            elems = driver.find_element_by_xpath(self.PHOTO_UPLOAD_XPATH)
             
             elems.click()
             time.sleep(1)
@@ -129,7 +133,7 @@ class GoogleGrabber:
             time.sleep(cfg.timeout() * 2)
             pred_error = False
             try:
-                pred = driver.find_element_by_xpath("/html/body/div[5]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
+                pred = driver.find_element_by_xpath(self.PRED_XPATH)
             except NoSuchElementException:
                 console.subfailure('No Prediction given sry...')
                 pred = None
@@ -137,7 +141,7 @@ class GoogleGrabber:
             except BrokenPipeError:
                 #just try again...
                 try:
-                    pred = driver.find_element_by_xpath("/html/body/div[5]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a")
+                    pred = driver.find_element_by_xpath(self.PRED_XPATH)
                 except NoSuchElementException:
                     console.subfailure('Broken pipe Error. This is not a Problem...moving on!')
                     console.subfailure('No Prediction given sry...')
