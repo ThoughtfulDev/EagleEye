@@ -18,7 +18,7 @@ RUN git clone https://github.com/ThoughtfulDev/EagleEye
 WORKDIR EagleEye
 RUN pip3.6 install -r requirements.txt
 RUN pip3.6 install --upgrade beautifulsoup4 html5lib spry
-ADD https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz /EagleEye/geckodriver.tar.gz
+ADD https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz /EagleEye/geckodriver.tar.gz
 RUN tar -xvf geckodriver.tar.gz
 RUN mv geckodriver /usr/bin/geckodriver
 RUN chmod +x /usr/bin/geckodriver

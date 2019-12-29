@@ -40,6 +40,8 @@ def getWebDriver():
         profile.set_preference('browser.download.manager.showWhenStarting', False)
         profile.set_preference('browser.download.dir', p)
         profile.set_preference('browser.helperApps.neverAsk.saveToDisk', 'text/csv')
+        profile.set_preference("browser.link.open_newwindow", 3)
+        profile.set_preference("browser.link.open_newwindow.restriction", 2)
         return webdriver.Firefox(profile)
     else:
         os.environ["webdriver.chrome.driver"] = cfg['WEBDRIVER']['PATH']

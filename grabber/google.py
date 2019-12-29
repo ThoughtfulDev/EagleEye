@@ -24,6 +24,8 @@ class GoogleGrabber:
     PHOTO_XPATH = "/html/body/div[1]/div[4]/div[2]/form/div[2]/div[1]/div[1]/div/div[3]/div/span"
     PHOTO_UPLOAD_XPATH = "/html/body/div[1]/div[4]/div[2]/div/div[2]/form/div[1]/div/a"
     PRED_XPATH = "/html/body/div[6]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a"
+    #PRED_LINKS = "//*[@class='iUh30']"
+    PRED_LINKS = "//*[@class='g']"
 
     def __init__(self):
         self.max_pages = cfg.google_img_pages()
@@ -32,7 +34,40 @@ class GoogleGrabber:
         self.driver = cfg.getWebDriver()
         self.links = []
         self.predictions = []
-    
+
+    def getLinks(self):
+        try:
+            link_name = self.driver.find_elements_by_tag_name('a')
+            links = []
+            for l in link_name:
+                link = l.get_attribute('href')
+                if not link == None:
+                    if filterLink(link):
+                        if (not "https://www.google.com/imgres?imgurl" in link) or (not "translate" in link) or (not "cdninstagram" in link):
+                            links.append(link)
+            links = list(set(links))
+            print(len(links))
+            print(links)
+            for link in links:
+                if "url?" in link:
+                    self.driver.execute_script('''window.open("''' + link + '''","_blank");''')
+                    time.sleep(2)
+                    #switch to tab
+                    self.driver.switch_to.window(driver.window_handles[1])
+                    time.sleep(1)
+                    url = self.driver.current_url
+                    self.driver.close()
+                    time.sleep(1)
+                    self.driver.switch_to.window(self.driver.window_handles[0])
+                    time.sleep(1)
+                    self.links.append(url)
+                    console.subtask("Added {}".format(url))
+                else:
+                    console.subtask("Skipping {}".format(link))
+                    self.links.append(link)
+        except:
+            pass
+
     def collectLinks(self, img_url):
         console.task('New Image: {0}'.format(img_url.strip()[:90]))  
         driver = self.driver
@@ -68,25 +103,10 @@ class GoogleGrabber:
             pred = pred.text       
         self.predictions.append(pred)
 
-        try:
-            
-            link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
-            #link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
-        except BrokenPipeError:
-            link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
-            #link_name=driver.find_elements_by_xpath(".//h3[@class='r']/a")
         console.subtask("Collecting Links...(Page 1)")
-        if len(link_name) <= 0: 
-            console.subfailure('No Links found')
-        else:
-            for link in link_name:
-                #href = link.get_attribute('href')
-                if link != None:
-                    href = link.text
-                    if filterLink(href):
-                        console.subtask('Added {0}'.format(href))
-                        self.links.append(href)
-
+        self.getLinks()
+            
+            
         for num in range(2, self.max_pages+1):
             console.subtask("Switching to Page {0}".format(num))
             try:
@@ -94,19 +114,11 @@ class GoogleGrabber:
                 page_n.click()
                 time.sleep(cfg.timeout())
                 console.subtask("Collecting Links...(Page {0})".format(num))
-                try:  
-                    link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
-                except BrokenPipeError:
-                    link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
-                for link in link_name:
-                    href = link.text
-                    if filterLink(href):
-                        console.subtask('Added {0}'.format(href))
-                        self.links.append(href)
+                self.getLinks()
             except NoSuchElementException:
                 console.subfailure('No more pages...')
-                break    
-
+                break
+                  
     def collectLinksLocal(self):
         driver = self.driver
         console.section("Uploading Local Known Images")
@@ -151,20 +163,9 @@ class GoogleGrabber:
             if not pred_error:
                 pred = pred.text       
             self.predictions.append(pred)
-            try:
-                link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
-            except BrokenPipeError:
-                link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
             console.subtask("Collecting Links...(Page 1)")
-            if len(link_name) <= 0: 
-                console.subfailure('No Links found')
-            else:
-                for link in link_name:
-                    if link != None:
-                        href = link.text
-                        if filterLink(href):
-                            console.subtask('Added {0}'.format(href))
-                            self.links.append(href)
+            self.getLinks()
+            
             
             for num in range(2, self.max_pages+1):
                 console.subtask("Switching to Page {0}".format(num))
@@ -173,18 +174,11 @@ class GoogleGrabber:
                     page_n.click()
                     time.sleep(cfg.timeout())
                     console.subtask("Collecting Links...(Page {0})".format(num))
-                    try:   
-                        link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
-                    except BrokenPipeError:
-                        link_name=driver.find_elements_by_xpath("//*[@class='iUh30']")
-                    for link in link_name:
-                        href = link.text
-                        if filterLink(href):
-                            console.subtask('Added {0}'.format(href))
-                            self.links.append(href)
+                    self.getLinks()
                 except NoSuchElementException:
                     console.subfailure('No more pages...')
-                    break    
+                    break
+            
 
     def finish(self):
         self.driver.close()

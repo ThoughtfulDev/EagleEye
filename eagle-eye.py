@@ -9,8 +9,6 @@ import utils.console as console
 import utils.config as cfg
 from grabber.facebook import FBGrabber, FBProfileGrabber
 from grabber.google import GoogleGrabber
-from grabber.yandex import YandexGrabber
-from grabber.pictriev import PictrievGrabber
 from grabber.instagram import InstagramGrabber
 from face_recog import FaceRecog
 import subprocess, json, shutil
@@ -32,7 +30,7 @@ def presentResult(predictions):
 def filterInstaLinks(links):
     r = []
     for l in links:
-        if "instagram.com" in l:
+        if "www.instagram.com" in l:
             r.append(l)
     return r
 
@@ -62,7 +60,7 @@ def getInstaLinks(username):
     instagrabber = InstagramGrabber(username)
     return instagrabber.getLinks()
 
-def main(skipFB=False, skipY=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=None):
+def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=None):
     if not skipFB:
         # collect user input
         if dockerMode:
@@ -132,16 +130,6 @@ def main(skipFB=False, skipY=False, FBUrls=[], jsonRep=None, dockerMode=False, d
     g.collectLinksLocal()
     rev_links, predictions = g.finish()
 
-    if not skipY:
-        yandex = YandexGrabber()
-        for img in profile_imgs:
-            yandex.collectLinks(img)
-        yandex.collectLinksLocal()
-        #add to rev_links
-        for e in yandex.finish():
-            rev_links.append(e)
-    else:
-        console.task('Skipping Yandex Search')
     rev_links = list(set(rev_links))
 
     instaNames = parseInstaUsername(filterInstaLinks(rev_links))
@@ -160,11 +148,6 @@ def main(skipFB=False, skipY=False, FBUrls=[], jsonRep=None, dockerMode=False, d
         for li in l:
             raider_img_list.append(li)
 
-    if len(raider_img_list) <= 0:
-        console.failure('No Links found...')
-    else:
-        console.task('RIP Imageraider')
-
 
     rev_links = list(set(rev_links))
     predictions = list(set(predictions))
@@ -182,27 +165,13 @@ def main(skipFB=False, skipY=False, FBUrls=[], jsonRep=None, dockerMode=False, d
         rev_links.append(pl)
     rev_links = list(set(rev_links))
 
-    #estimate age
-    ageEstimator = PictrievGrabber()
-    if len(validatedInstaNames) > 0:
-        for v in validatedInstaNames:
-            l = getInstaLinks(v)
-            if len(l) >= cfg.instaLimit():
-                l = l[:cfg.instaLimit()]
-            for li in l:
-                ageEstimator.collectAges(li)
-        age = ageEstimator.finish()
-    else:
-        console.failure('No Instagram Images to upload...')
-        #ageEstimator.finish()
-        age = "Unknown"
 
     if jsonRep:
         console.section("Dumping JSON Report")
-        makeJSONReport(name, rev_links, predictions, validatedInstaNames, age, jsonRep)
+        makeJSONReport(name, rev_links, predictions, validatedInstaNames, jsonRep)
     else:
         console.section("Creating PDF Report")
-        makeReport(name, rev_links, predictions, validatedInstaNames, age)
+        makeReport(name, rev_links, predictions, validatedInstaNames)
 
 
     p = os.path.join(tempfile.gettempdir(), 'imageraider')
@@ -218,8 +187,6 @@ if __name__ == "__main__":
     console.banner()
     parser = argparse.ArgumentParser()
     parser.add_argument('-sFB', '--skipfb', action='store_true', help='Skips the Facebook Search')
-    #parser.add_argument('-sIR', '--skipir', action='store_true', help='Skips the ImageRaider Reverse Search')
-    parser.add_argument('-sY', '--skipyandex', action='store_true', help='Skips the Yandex Reverse Search')
     parser.add_argument('-d', '--docker', action='store_true', help='Set this flag if run in docker mode')
     parser.add_argument('-n', '--name', nargs='?', help='Specify the persons name. Only active with the --docker flag')
     parser.add_argument('-json', '--json', nargs='?', help='Generates a json report. Specify a Filename')
@@ -253,9 +220,9 @@ if __name__ == "__main__":
             with open(args.facebookList, 'r') as f:
                 content = f.readlines()
             content = [x.strip() for x in content] 
-            main(skipFB=args.skipfb, skipY=args.skipyandex, FBUrls=content, jsonRep=jsonRepFile, dockerMode=aDocker, dockerName=aName)
+            main(skipFB=args.skipfb, FBUrls=content, jsonRep=jsonRepFile, dockerMode=aDocker, dockerName=aName)
         else:
             console.failure("File '{}' does not exist".format(args.facebookList))
             sys.exit(-1)
     else:
-        main(skipFB=args.skipfb, skipY=args.skipyandex, FBUrls=[], jsonRep=jsonRepFile, dockerMode=aDocker, dockerName=aName)
+        main(skipFB=args.skipfb, FBUrls=[], jsonRep=jsonRepFile, dockerMode=aDocker, dockerName=aName)

@@ -2,7 +2,7 @@ from weasyprint import HTML
 import os
 import json
 
-def makeReport(name, links, preds, instnames, age):
+def makeReport(name, links, preds, instnames):
     #sort
     links = sorted(links)
     preds = sorted(preds)
@@ -13,7 +13,6 @@ def makeReport(name, links, preds, instnames, age):
     with open('./report/template.html', 'r') as f:
         template_data = f.read()
     template_data = template_data.replace('{{INPUT_NAME}}', name)
-    template_data = template_data.replace('{{ES_AGE}}', str(age))
     links_str = ""
     for l in links:
         links_str += "<li>"
@@ -38,7 +37,7 @@ def makeReport(name, links, preds, instnames, age):
     doc.write_pdf('{0}_Report.pdf'.format(name))
     os.remove('tmp.html')
 
-def makeJSONReport(name, links, preds, instnames, age, fn):
+def makeJSONReport(name, links, preds, instnames, fn):
     data = {}
     links = sorted(links)
     preds = sorted(preds)
@@ -48,7 +47,6 @@ def makeJSONReport(name, links, preds, instnames, age, fn):
     name = name.replace('%20', '-')
 
     data['name'] = name
-    data['age'] = str(age)
     data['social_urls'] = links
     data['google_predictions'] = preds
     data['instagram_names'] = instnames
