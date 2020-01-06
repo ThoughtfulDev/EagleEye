@@ -53,7 +53,7 @@ class GoogleGrabber:
                     self.driver.execute_script('''window.open("''' + link + '''","_blank");''')
                     time.sleep(2)
                     #switch to tab
-                    self.driver.switch_to.window(driver.window_handles[1])
+                    self.driver.switch_to.window(self.driver.window_handles[1])
                     time.sleep(1)
                     url = self.driver.current_url
                     self.driver.close()
