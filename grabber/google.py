@@ -76,7 +76,7 @@ class GoogleGrabber:
         elems = driver.find_elements_by_xpath(self.PHOTO_XPATH)[0]
         elems.click()
         time.sleep(1)
-        input = driver.find_elements_by_xpath('//*[@id="qbui"]')[0]
+        input = driver.find_elements_by_xpath('//*[@id="Ycyxxc"]')[0]
         input.clear()
         input.send_keys(img_url)
         input.send_keys(Keys.RETURN)
@@ -139,7 +139,7 @@ class GoogleGrabber:
             elems.click()
             time.sleep(1)
             console.subtask("Inserting Path")
-            input_box = driver.find_element_by_xpath('//*[@id="qbfile"]')
+            input_box = driver.find_element_by_xpath('//*[@id="awyMjb"]')
             p_i = os.path.join(os.getcwd(), str_p)
             input_box.send_keys(p_i)
             time.sleep(cfg.timeout() * 2)
