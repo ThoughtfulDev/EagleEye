@@ -21,7 +21,7 @@ def filterLink(link):
 
 class GoogleGrabber:
     
-    PHOTO_XPATH = "/html/body/div/div[3]/div[2]/form/div[2]/div[1]/div[1]/div/div[3]/div/span"
+    PHOTO_XPATH = "/html/body/div/div[3]/div[2]/form/div[2]/div[1]/div[1]/div/div[3]/div[2]/span"
     PHOTO_UPLOAD_XPATH = "/html/body/div[1]/div[3]/div[2]/div/div[2]/form/div[1]/div/a"
     PRED_XPATH = "/html/body/div[6]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a"
     #PRED_LINKS = "//*[@class='iUh30']"
