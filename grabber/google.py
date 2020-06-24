@@ -23,7 +23,7 @@ class GoogleGrabber:
     
     PHOTO_XPATH = "/html/body/div/div[3]/div[2]/form/div[2]/div[1]/div[1]/div/div[3]/div[2]/span"
     PHOTO_UPLOAD_XPATH = "/html/body/div[1]/div[3]/div[2]/div/div[2]/form/div[1]/div/a"
-    PRED_XPATH = "/html/body/div[6]/div[3]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a"
+    PRED_XPATH = "/html/body/div[6]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a"
     #PRED_LINKS = "//*[@class='iUh30']"
     PRED_LINKS = "//*[@class='g']"
 
@@ -46,8 +46,8 @@ class GoogleGrabber:
                         if (not "https://www.google.com/imgres?imgurl" in link) or (not "translate" in link) or (not "cdninstagram" in link):
                             links.append(link)
             links = list(set(links))
-            print(len(links))
-            print(links)
+            #print(len(links))
+            #print(links)
             for link in links:
                 if "url?" in link:
                     self.driver.execute_script('''window.open("''' + link + '''","_blank");''')

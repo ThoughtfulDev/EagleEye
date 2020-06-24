@@ -49,6 +49,7 @@ def parseInstaUsername(links):
 
 def validateInstaUser(username, num_jitters):
     images = getInstaLinks(username)
+    #print(images)
     if len(images) >= cfg.instaLimit():
         images = images[:cfg.instaLimit()]
     r = FaceRecog(username, images, num_jitters=num_jitters)
