@@ -64,7 +64,7 @@ These instructions will get you a copy of the project up and running on your loc
    ``` $ git clone https://github.com/ThoughtfulDev/EagleEye ```
 2. ```
    $ cd EagleEye
-   $ sudo docker build -t eagle-eye - < dockerfile
+   $ sudo docker build -t eagle-eye .
    ```
 3. Now create a `known` folder and a `result` folder anywhere on your PC.
 4. Put the images of the known person in the known folder.
