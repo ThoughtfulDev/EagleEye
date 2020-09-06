@@ -9,7 +9,7 @@ class InstagramGrabber:
     def getLinks(self):
         session = HTMLSession()
         r = session.get('https://instagram.com/' + self.username)
-        l = r.html.find('body > script:nth-child(5)')[0].text
+        l = r.html.find('body > script:nth-child(4)')[0].text
         json_str = l[21:]
         json_str = json_str[:-1]
         json_parsed = json.loads(json_str)
