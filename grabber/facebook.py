@@ -72,13 +72,14 @@ class FBProfileGrabber:
             driver.get(profile_url)
 
             #first possibility
+            
             profile_img_links = driver.find_elements_by_xpath("/html/body/div[1]/div[4]/div[1]/div/div[2]/div[2]/div[2]/div/div[1]/div[1]/div[3]/div/div[2]/div[3]/div/div/div/img")
             for e in profile_img_links:
                 img_src = e.get_attribute("src")
                 img_urls.append(img_src)
             
             #second possivility
-            profile_img_links = driver.find_elements_by_xpath("/html/body/div[1]/div[4]/div[1]/div/div/div[1]/div/div/div[1]/div/a/img")
+            profile_img_links = driver.find_elements_by_xpath("/html/body/div[1]/div[1]/div[3]/div[1]/div/div/div[1]/div/div/div[1]/div/div/div/a/div/img")
             for e in profile_img_links:
                 img_src = e.get_attribute("src")
                 img_urls.append(img_src)
