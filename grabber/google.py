@@ -20,11 +20,9 @@ def filterLink(link):
 
 
 class GoogleGrabber:
-    
-    PHOTO_XPATH = "/html/body/div/div[2]/div[2]/form/div[2]/div[1]/div[1]/div/div[3]/div[2]/span"
-    PHOTO_UPLOAD_XPATH = "/html/body/div[2]/div[2]/div[2]/div/div[2]/form/div[1]/div/a"
+    PHOTO_XPATH =  "/html/body/div[2]/div[3]/div[2]/form/div[1]/div[1]/div[1]/div/div[3]/div[2]"
+    PHOTO_UPLOAD_XPATH = "/html/body/div[2]/div[3]/div[2]/div/div[2]/form/div[1]/div/a"
     PRED_XPATH = "/html/body/div[6]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a"
-    #PRED_LINKS = "//*[@class='iUh30']"
     PRED_LINKS = "//*[@class='g']"
 
     def __init__(self):
@@ -73,6 +71,8 @@ class GoogleGrabber:
         driver = self.driver
         driver.get("https://www.google.com/imghp")
         console.subtask('Inserting Image URL')
+        console.task("Please agree to google's stuff in the browser")
+        time.sleep(10)
         elems = driver.find_elements_by_xpath(self.PHOTO_XPATH)[0]
         elems.click()
         time.sleep(1)
@@ -131,6 +131,8 @@ class GoogleGrabber:
         for p in pathlist:
             str_p = str(p)
             driver.get("https://www.google.com/imghp")
+            console.task("Please agree to google's stuff in the browser")
+            time.sleep(10)
             elems = driver.find_elements_by_xpath(self.PHOTO_XPATH)[0]
             elems.click()
             time.sleep(1)
