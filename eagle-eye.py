@@ -61,15 +61,15 @@ def getInstaLinks(username):
     instagrabber = InstagramGrabber(username)
     return instagrabber.getLinks()
 
-def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=None):
+def main(skipFB=False, FBUrls=None, jsonRep=None, dockerMode=False, dockerName=None):
+    FBUrls = FBUrls or []
     if not skipFB:
         # collect user input
         if dockerMode:
             console.section("Running in DOCKER MODE")
             name = dockerName
         else:
-            console.prompt('Enter the persons name to find on FB: ')
-            name = input('')
+            name = ''
             while not name:
                 console.prompt('Enter the persons name to find on FB: ')
                 name = input('')
