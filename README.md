@@ -84,14 +84,14 @@ The result should now be in `/path/to/result`
 
 ---
 
-#### Automated Prequisites Installation (If Docker doesn't work)
+#### Automated Prerequisites Installation (If Docker doesn't work)
 ```
 wget https://raw.githubusercontent.com/ThoughtfulDev/EagleEye/master/install.sh && chmod +x install.sh && ./install.sh
 ```
 
 ---
 
-#### Manual Prequisites Installation (If you are hardcore)
+#### Manual Prerequisites Installation (If you are hardcore)
 
 For **Debian** based Distros
 ```
