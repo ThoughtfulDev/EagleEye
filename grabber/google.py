@@ -20,9 +20,9 @@ def filterLink(link):
 
 
 class GoogleGrabber:
-    PHOTO_XPATH =  "/html/body/div[2]/div[3]/div[2]/form/div[1]/div[1]/div[1]/div/div[3]/div[2]"
-    PHOTO_UPLOAD_XPATH = "/html/body/div[2]/div[3]/div[2]/div/div[2]/form/div[1]/div/a"
-    PRED_XPATH = "/html/body/div[6]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div[1]/div/div[2]/a"
+    PHOTO_XPATH =  '//*[@id="sbtc"]/div/div[3]/div[2]/span'
+    PHOTO_UPLOAD_XPATH = '//*[@id="dRSWfb"]/div/a'
+    PRED_XPATH = "/html/body/div[7]/div/div[9]/div[1]/div/div[2]/div[1]/div/div[2]/a"
     PRED_LINKS = "//*[@class='g']"
 
     def __init__(self):

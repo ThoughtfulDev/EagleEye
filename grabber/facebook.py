@@ -18,6 +18,9 @@ class FBGrabber:
         self.profile_list = []
         self.profile_img = []
 
+        console.task("Please agree to facebook's stuff in the browser")
+        time.sleep(10)
+
         #get all profile image links
         profile_img_links = driver.find_elements_by_xpath("//a[@class='_2ial']")
         console.subtask('Collecting Image URLs...(Page 1)')
