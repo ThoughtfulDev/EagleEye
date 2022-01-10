@@ -1,15 +1,20 @@
 {
-    "google_predictions": ["emeraude toubia instagram"], 
-    "instagram_names": ["emeraude"], 
-    "age": "27", 
+    "google_predictions": [
+        "emeraude toubia instagram"
+    ],
+    "instagram_names": [
+        "emeraude"
+    ],
+    "age": "27",
     "social_urls": [
-        "https://twitter.com/emeraudetoubia/status/957383692833390593?lang=de", 
-        "https://twitter.com/gio53613", 
-        "https://twitter.com/onlyoulon", 
-        "https://www.instagram.com/emeraude/?hl=de", 
-        "https://www.instagram.com/p/BO3IpgFlVTF/?hl=de", 
-        "https://www.pinterest.com.mx/pin/344595808982228575/", 
-        "https://www.pinterest.com/gogreengo06/gorgeous-emeraude-toubia/", 
-        "https://www.pinterest.com/syc_mary/e-m-e-r-a-u-d-e-toubia/"], 
+        "https://twitter.com/emeraudetoubia/status/957383692833390593?lang=de",
+        "https://twitter.com/gio53613",
+        "https://twitter.com/onlyoulon",
+        "https://www.instagram.com/emeraude/?hl=de",
+        "https://www.instagram.com/p/BO3IpgFlVTF/?hl=de",
+        "https://www.pinterest.com.mx/pin/344595808982228575/",
+        "https://www.pinterest.com/gogreengo06/gorgeous-emeraude-toubia/",
+        "https://www.pinterest.com/syc_mary/e-m-e-r-a-u-d-e-toubia/"
+    ],
     "name": "Unknown"
 }

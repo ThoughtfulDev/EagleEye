@@ -2,8 +2,9 @@ from weasyprint import HTML
 import os
 import json
 
+
 def makeReport(name, links, preds, instnames):
-    #sort
+    # sort
     links = sorted(links)
     preds = sorted(preds)
     instnames = sorted(instnames)
@@ -28,7 +29,8 @@ def makeReport(name, links, preds, instnames):
     insta_str = ""
     for i in instnames:
         insta_str += "<li>"
-        insta_str += '<a href="https://www.instagram.com/{0}">https://instagram.com/{0}</a>'.format(i)
+        insta_str += '<a href="https://www.instagram.com/{0}">https://instagram.com/{0}</a>'.format(
+            i)
         insta_str += "</li>"
     template_data = template_data.replace('{{INSTA_PROFILES}}', insta_str)
     with open('tmp.html', 'w') as t:
@@ -36,6 +38,7 @@ def makeReport(name, links, preds, instnames):
     doc = HTML('tmp.html')
     doc.write_pdf('{0}_Report.pdf'.format(name))
     os.remove('tmp.html')
+
 
 def makeJSONReport(name, links, preds, instnames, fn):
     data = {}
@@ -52,4 +55,3 @@ def makeJSONReport(name, links, preds, instnames, fn):
     data['instagram_names'] = instnames
     with open(fn, 'w') as o:
         json.dump(data, o)
-

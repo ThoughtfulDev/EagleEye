@@ -19,15 +19,19 @@ def google_img_pages():
 def google_filter():
     return cfg['FILTER']
 
+
 def instaLimit():
     return int(cfg['INSTA_VALIDATION_MAX_IMAGES'])
+
 
 def jitters():
     return int(cfg['JITTERS'])
 
+
 def getWebDriver():
     if not os.path.isfile(cfg['WEBDRIVER']['PATH']):
-        print("{0} does not exist - install a webdriver".format(cfg['WEBDRIVER']['PATH']))
+        print(
+            "{0} does not exist - install a webdriver".format(cfg['WEBDRIVER']['PATH']))
         sys.exit(-2)
     d = cfg['WEBDRIVER']['ENGINE']
     if d.lower() == 'firefox':
@@ -36,10 +40,13 @@ def getWebDriver():
         if not os.path.isdir(p):
             os.makedirs(p)
         profile = webdriver.FirefoxProfile()
-        profile.set_preference('browser.download.folderList', 2) # custom location
-        profile.set_preference('browser.download.manager.showWhenStarting', False)
+        profile.set_preference(
+            'browser.download.folderList', 2)  # custom location
+        profile.set_preference(
+            'browser.download.manager.showWhenStarting', False)
         profile.set_preference('browser.download.dir', p)
-        profile.set_preference('browser.helperApps.neverAsk.saveToDisk', 'text/csv')
+        profile.set_preference(
+            'browser.helperApps.neverAsk.saveToDisk', 'text/csv')
         profile.set_preference("browser.link.open_newwindow", 3)
         profile.set_preference("browser.link.open_newwindow.restriction", 2)
         return webdriver.Firefox(profile)

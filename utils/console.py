@@ -4,6 +4,7 @@ import getpass
 
 VER = "0.2"
 
+
 def banner():
     logo = """
 ███████╗ █████╗  ██████╗ ██╗     ███████╗       ███████╗██╗   ██╗███████╗
@@ -18,7 +19,7 @@ def banner():
     print(logo.format(
         VER,
         colored(getpass.getuser(), 'red', attrs=['bold'])
-        )
+    )
     )
 
 
@@ -30,7 +31,7 @@ def section(name):
     print("\n{} {}".format(
         colored("::", 'blue', attrs=['bold']),
         colored(name, attrs=['bold'])
-        )
+    )
     )
 
 
@@ -38,7 +39,7 @@ def task(name):
     print('{} {}'.format(
         colored("==>", 'green', attrs=['bold']),
         colored(name, attrs=['bold'])
-        )
+    )
     )
 
 
@@ -46,7 +47,7 @@ def subtask(name):
     print('{} {}'.format(
         colored("  ->", 'blue', attrs=['bold']),
         colored(name, attrs=['bold'])
-        )
+    )
     )
 
 
@@ -54,7 +55,7 @@ def failure(name):
     print('{} {}'.format(
         colored("==> ERROR:", 'red', attrs=['bold']),
         colored(name, attrs=['bold'])
-        )
+    )
     )
 
 
@@ -62,7 +63,7 @@ def subfailure(name):
     print('{} {}'.format(
         colored("  ->", 'red', attrs=['bold']),
         colored(name, 'red', attrs=['bold'])
-        )
+    )
     )
 
 

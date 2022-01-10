@@ -22,7 +22,8 @@ class InstagramGrabber:
                 shortcodes.append(shortcode)
             links = []
             for sc in shortcodes:
-                r = session.get('https://instagram.com/p/' + sc + '/?taken-by=' + self.username)
+                r = session.get('https://instagram.com/p/' +
+                                sc + '/?taken-by=' + self.username)
                 img = r.html.find('meta[property="og:image"]')
                 if len(img) > 0:
                     img = img[0]

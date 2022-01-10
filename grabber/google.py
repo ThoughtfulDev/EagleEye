@@ -10,7 +10,6 @@ import utils.config as cfg
 import utils.console as console
 
 
-
 def filterLink(link):
     filters = cfg.google_filter()
     for f in filters:
@@ -20,7 +19,7 @@ def filterLink(link):
 
 
 class GoogleGrabber:
-    PHOTO_XPATH =  '//*[@id="sbtc"]/div/div[3]/div[2]/span'
+    PHOTO_XPATH = '//*[@id="sbtc"]/div/div[3]/div[2]/span'
     PHOTO_UPLOAD_XPATH = '//*[@id="dRSWfb"]/div/a'
     PRED_XPATH = "/html/body/div[7]/div/div[9]/div[1]/div/div[2]/div[1]/div/div[2]/a"
     PRED_LINKS = "//*[@class='g']"
@@ -44,13 +43,14 @@ class GoogleGrabber:
                         if (not "https://www.google.com/imgres?imgurl" in link) or (not "translate" in link) or (not "cdninstagram" in link):
                             links.append(link)
             links = list(set(links))
-            #print(len(links))
-            #print(links)
+            # print(len(links))
+            # print(links)
             for link in links:
                 if "url?" in link:
-                    self.driver.execute_script('''window.open("''' + link + '''","_blank");''')
+                    self.driver.execute_script(
+                        '''window.open("''' + link + '''","_blank");''')
                     time.sleep(2)
-                    #switch to tab
+                    # switch to tab
                     self.driver.switch_to.window(self.driver.window_handles[1])
                     time.sleep(1)
                     url = self.driver.current_url
@@ -67,7 +67,7 @@ class GoogleGrabber:
             pass
 
     def collectLinks(self, img_url):
-        console.task('New Image: {0}'.format(img_url.strip()[:90]))  
+        console.task('New Image: {0}'.format(img_url.strip()[:90]))
         driver = self.driver
         driver.get("https://www.google.com/imghp")
         console.subtask('Inserting Image URL')
@@ -90,23 +90,23 @@ class GoogleGrabber:
             pred = None
             pred_error = True
         except BrokenPipeError:
-            #just try again...
+            # just try again...
             try:
                 pred = driver.find_element_by_xpath(self.PRED_XPATH)
             except NoSuchElementException:
-                console.subfailure('Broken pipe Error. This is not a Problem...moving on!')
+                console.subfailure(
+                    'Broken pipe Error. This is not a Problem...moving on!')
                 console.subfailure('No Prediction given sry...')
                 pred = None
                 pred_error = True
-                
+
         if not pred_error:
-            pred = pred.text       
+            pred = pred.text
         self.predictions.append(pred)
 
         console.subtask("Collecting Links...(Page 1)")
         self.getLinks()
-            
-            
+
         for num in range(2, self.max_pages+1):
             console.subtask("Switching to Page {0}".format(num))
             try:
@@ -118,7 +118,7 @@ class GoogleGrabber:
             except NoSuchElementException:
                 console.subfailure('No more pages...')
                 break
-                  
+
     def collectLinksLocal(self):
         driver = self.driver
         console.section("Uploading Local Known Images")
@@ -137,7 +137,7 @@ class GoogleGrabber:
             elems.click()
             time.sleep(1)
             elems = driver.find_element_by_xpath(self.PHOTO_UPLOAD_XPATH)
-            
+
             elems.click()
             time.sleep(1)
             console.subtask("Inserting Path")
@@ -153,34 +153,34 @@ class GoogleGrabber:
                 pred = None
                 pred_error = True
             except BrokenPipeError:
-                #just try again...
+                # just try again...
                 try:
                     pred = driver.find_element_by_xpath(self.PRED_XPATH)
                 except NoSuchElementException:
-                    console.subfailure('Broken pipe Error. This is not a Problem...moving on!')
+                    console.subfailure(
+                        'Broken pipe Error. This is not a Problem...moving on!')
                     console.subfailure('No Prediction given sry...')
                     pred = None
                     pred_error = True
-                
+
             if not pred_error:
-                pred = pred.text       
+                pred = pred.text
             self.predictions.append(pred)
             console.subtask("Collecting Links...(Page 1)")
             self.getLinks()
-            
-            
+
             for num in range(2, self.max_pages+1):
                 console.subtask("Switching to Page {0}".format(num))
                 try:
                     page_n = driver.find_element_by_link_text(str(num))
                     page_n.click()
                     time.sleep(cfg.timeout())
-                    console.subtask("Collecting Links...(Page {0})".format(num))
+                    console.subtask(
+                        "Collecting Links...(Page {0})".format(num))
                     self.getLinks()
                 except NoSuchElementException:
                     console.subfailure('No more pages...')
                     break
-            
 
     def finish(self):
         self.driver.close()

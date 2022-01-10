@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import os, sys
+import os
+import sys
 import tempfile
 import argparse
 from collections import Counter
@@ -11,7 +12,9 @@ from grabber.facebook import FBGrabber, FBProfileGrabber
 from grabber.google import GoogleGrabber
 from grabber.instagram import InstagramGrabber
 from face_recog import FaceRecog
-import subprocess, json, shutil
+import subprocess
+import json
+import shutil
 from report.report import makeReport, makeJSONReport
 
 
@@ -27,12 +30,14 @@ def presentResult(predictions):
     else:
         console.failure("No predictions found")
 
+
 def filterInstaLinks(links):
     r = []
     for l in links:
         if "www.instagram.com" in l:
             r.append(l)
     return r
+
 
 def parseInstaUsername(links):
     usernames = []
@@ -49,7 +54,7 @@ def parseInstaUsername(links):
 
 def validateInstaUser(username, num_jitters):
     images = getInstaLinks(username)
-    #print(images)
+    # print(images)
     if len(images) >= cfg.instaLimit():
         images = images[:cfg.instaLimit()]
     r = FaceRecog(username, images, num_jitters=num_jitters)
@@ -57,9 +62,11 @@ def validateInstaUser(username, num_jitters):
     profile_links, _ = r.getValidLinksAndImg(username)
     return len(profile_links) > 0
 
+
 def getInstaLinks(username):
     instagrabber = InstagramGrabber(username)
     return instagrabber.getLinks()
+
 
 def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=None):
     if not skipFB:
@@ -77,12 +84,12 @@ def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=Non
         console.task('Skipping FB Search')
         name = "Unknown"
 
-    
     if dockerMode:
         console.task('Skipping jitters since specified in config.json')
         num_jitters = cfg.jitters()
     else:
-        console.prompt('How many jitters, higher is better [max 100] (default=70): ')
+        console.prompt(
+            'How many jitters, higher is better [max 100] (default=70): ')
         num_jitters = input('')
     if not num_jitters:
         console.task('Settings jitters to 70')
@@ -98,7 +105,8 @@ def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=Non
         f = FBGrabber(name)
         f.grabData()
         # do face recognition on those profile images
-        r = FaceRecog(f.getProfileLinks(), f.getProfileImages(), num_jitters=num_jitters)
+        r = FaceRecog(f.getProfileLinks(), f.getProfileImages(),
+                      num_jitters=num_jitters)
         r.loadKnown(name)
         profile_links, profile_imgs = r.getValidLinksAndImg(name)
         console.section('Result')
@@ -109,7 +117,7 @@ def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=Non
         if len(FBUrls) > 0:
             f = FBProfileGrabber(FBUrls)
             img_urls = f.grabLinks()
-            #FBURLS are our profile links synchron with img_urls
+            # FBURLS are our profile links synchron with img_urls
             # so FBURLS[0] <=> img_urls[0]
             r = FaceRecog(FBUrls, img_urls, num_jitters=num_jitters)
             r.loadKnown(name)
@@ -140,7 +148,6 @@ def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=Non
         console.task("Validating Profile: '{0}'".format(un))
         if validateInstaUser(un, num_jitters):
             validatedInstaNames.append(un)
-    
 
     raider_img_list = profile_imgs
     for v in validatedInstaNames:
@@ -148,7 +155,6 @@ def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=Non
 
         for li in l:
             raider_img_list.append(li)
-
 
     rev_links = list(set(rev_links))
     predictions = list(set(predictions))
@@ -161,19 +167,18 @@ def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=Non
         predictions = []
     print(predictions)
     presentResult(predictions)
-    
+
     for pl in profile_links:
         rev_links.append(pl)
     rev_links = list(set(rev_links))
 
-
     if jsonRep:
         console.section("Dumping JSON Report")
-        makeJSONReport(name, rev_links, predictions, validatedInstaNames, jsonRep)
+        makeJSONReport(name, rev_links, predictions,
+                       validatedInstaNames, jsonRep)
     else:
         console.section("Creating PDF Report")
         makeReport(name, rev_links, predictions, validatedInstaNames)
-
 
     p = os.path.join(tempfile.gettempdir(), 'imageraider')
     if os.path.isdir(p):
@@ -187,14 +192,18 @@ def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=Non
 if __name__ == "__main__":
     console.banner()
     parser = argparse.ArgumentParser()
-    parser.add_argument('-sFB', '--skipfb', action='store_true', help='Skips the Facebook Search')
-    parser.add_argument('-d', '--docker', action='store_true', help='Set this flag if run in docker mode')
-    parser.add_argument('-n', '--name', nargs='?', help='Specify the persons name. Only active with the --docker flag')
-    parser.add_argument('-json', '--json', nargs='?', help='Generates a json report. Specify a Filename')
-    parser.add_argument('-fbList', 
-                        '--facebookList', 
-                        nargs='?', 
-                        help="A file which contains Links to Facebook Profiles. '--skipfb' options must be enabled to use this" )
+    parser.add_argument('-sFB', '--skipfb', action='store_true',
+                        help='Skips the Facebook Search')
+    parser.add_argument('-d', '--docker', action='store_true',
+                        help='Set this flag if run in docker mode')
+    parser.add_argument('-n', '--name', nargs='?',
+                        help='Specify the persons name. Only active with the --docker flag')
+    parser.add_argument('-json', '--json', nargs='?',
+                        help='Generates a json report. Specify a Filename')
+    parser.add_argument('-fbList',
+                        '--facebookList',
+                        nargs='?',
+                        help="A file which contains Links to Facebook Profiles. '--skipfb' options must be enabled to use this")
     args = parser.parse_args()
 
     if args.docker:
@@ -220,10 +229,13 @@ if __name__ == "__main__":
         if os.path.isfile(args.facebookList):
             with open(args.facebookList, 'r') as f:
                 content = f.readlines()
-            content = [x.strip() for x in content] 
-            main(skipFB=args.skipfb, FBUrls=content, jsonRep=jsonRepFile, dockerMode=aDocker, dockerName=aName)
+            content = [x.strip() for x in content]
+            main(skipFB=args.skipfb, FBUrls=content, jsonRep=jsonRepFile,
+                 dockerMode=aDocker, dockerName=aName)
         else:
-            console.failure("File '{}' does not exist".format(args.facebookList))
+            console.failure(
+                "File '{}' does not exist".format(args.facebookList))
             sys.exit(-1)
     else:
-        main(skipFB=args.skipfb, FBUrls=[], jsonRep=jsonRepFile, dockerMode=aDocker, dockerName=aName)
+        main(skipFB=args.skipfb, FBUrls=[], jsonRep=jsonRepFile,
+             dockerMode=aDocker, dockerName=aName)
