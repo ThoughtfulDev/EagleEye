@@ -72,12 +72,11 @@ These instructions will get you a copy of the project up and running on your loc
 6. Start the container. **Make sure to edit the paths**:
 ```
 sudo docker run -t --net=host --env="DISPLAY" \
-                           --volume="$HOME/.Xauthority:/root/.Xauthority:rw"  \
-                           -v  /path/to/known:/EagleEye/known \
-                           -v  /path/to/result:/result \
-                           -v /path/to/EagleEye/Repository/entry.sh:/entry.sh \
-                           eagle-eye
-
+    --volume="$HOME/.Xauthority:/root/.Xauthority:rw"  \
+    -v $(pwd)/known:/app/eagle_eye/known \
+    -v $(pwd)/result:/app/eagle_eye/result \
+    -v $(pwd)/entrypoint.sh:/app/eagle_eye/entrypoint.sh \
+    eagle-eye
 ```
 
 The result should now be in `/path/to/result`

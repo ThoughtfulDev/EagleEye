@@ -1,6 +1,6 @@
-#!/bin/bash
-cd /EagleEye
-python3.6 eagle-eye.py --docker --name "Emeraude"
+#!/bin/sh
+
+python /app/eagle_eye/eagle_eye.py --docker --name "${@}"
 
 #now copy the result
-yes | cp -rf /EagleEye/*.pdf /result/
+# yes | cp -rf ./known/*.pdf ./result/

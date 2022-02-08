@@ -1,6 +1,9 @@
 termcolor
-opencv-python
+opencv-python==4.5.3.56
 selenium
 face_recognition
 WeasyPrint
 requests-html
+beautifulsoup4 
+html5lib 
+spry
