@@ -88,10 +88,12 @@ class FaceRecog:
         return valid_links
     
     def getValidLinksAndImg(self, label):
-        if len(self.known_face_encodings) <= 0:
-            console.failure('No Face Encodings found!')
+        if len(self.known_face_encodings) <= 0: # if no face encodings are found
+            console.failure('No Face Encodings found!') # print error message
             console.failure('Did you call `loadKnown(label)` before calling this method?')
             return [], []
+        else:
+            console.success('Encodings found!') # print success message
         valid_url = []
         valid_img = []
         valid_indexes = self.constructIndexes(label)
