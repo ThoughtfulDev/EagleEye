@@ -33,14 +33,19 @@ class FaceRecog:
         for path in pathlist:
             p_str = str(path)
             delim = '/'
-            if platform == "win32":
-                delim = '\\'
+            if platform == "win32": # if windows
+                delim = '\\' # change delimiter
+            else: # if not windows
+                console.error('OS not supported') # return error message is not windows
             console.subtask('Loading {0}'.format(p_str.split(delim)[1]))
             im = face_recognition.load_image_file(p_str)
             encoding = face_recognition.face_encodings(im, num_jitters=self.num_jitters)
-            for e in encoding:
-                self.known_face_encodings.append(e)
-                self.known_face_names.append(label)
+            if len(encoding) > 0: # if face is found
+                for e in encoding: # add all faces to known faces
+                    self.known_face_encodings.append(e)
+                    self.known_face_names.append(label)
+            else: # if no face is found
+                console.error('No face found') # print error
 
     def constructIndexes(self, label):
         valid_links = []
@@ -67,20 +72,28 @@ class FaceRecog:
                     first_match_index = matches.index(True)
                     name = self.known_face_names[first_match_index]
                 face_names.append(name)
+                else:
+                    console.error('No face found')
 
             for _, name in zip(face_locations, face_names):
                 if name == label:
                     valid_links.append(num)
+                else:
+                    console.error('No face found')
         if os.path.isfile(tmp_path):
             console.task("Removing {0}".format(tmp_path))
             os.remove(tmp_path)
+        else:
+            console.error("Error: %s file not found" % tmp_path)
         return valid_links
     
     def getValidLinksAndImg(self, label):
-        if len(self.known_face_encodings) <= 0:
-            console.failure('No Face Encodings found!')
+        if len(self.known_face_encodings) <= 0: # if no face encodings are found
+            console.failure('No Face Encodings found!') # print error message
             console.failure('Did you call `loadKnown(label)` before calling this method?')
             return [], []
+        else:
+            console.success('Encodings found!') # print success message
         valid_url = []
         valid_img = []
         valid_indexes = self.constructIndexes(label)
