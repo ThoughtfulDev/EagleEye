@@ -38,9 +38,12 @@ class FaceRecog:
             console.subtask('Loading {0}'.format(p_str.split(delim)[1]))
             im = face_recognition.load_image_file(p_str)
             encoding = face_recognition.face_encodings(im, num_jitters=self.num_jitters)
-            for e in encoding:
-                self.known_face_encodings.append(e)
-                self.known_face_names.append(label)
+            if len(encoding) > 0: # if face is found
+                for e in encoding: # add all faces to known faces
+                    self.known_face_encodings.append(e)
+                    self.known_face_names.append(label)
+            else: # if no face is found
+                console.error('No face found') # print error
 
     def constructIndexes(self, label):
         valid_links = []
