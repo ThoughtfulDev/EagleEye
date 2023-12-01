@@ -78,6 +78,8 @@ class FaceRecog:
             for _, name in zip(face_locations, face_names):
                 if name == label:
                     valid_links.append(num)
+                else:
+                    console.error('No face found')
         if os.path.isfile(tmp_path):
             console.task("Removing {0}".format(tmp_path))
             os.remove(tmp_path)
