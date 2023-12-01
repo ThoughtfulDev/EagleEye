@@ -83,6 +83,8 @@ class FaceRecog:
         if os.path.isfile(tmp_path):
             console.task("Removing {0}".format(tmp_path))
             os.remove(tmp_path)
+        else:
+            console.error("Error: %s file not found" % tmp_path)
         return valid_links
     
     def getValidLinksAndImg(self, label):
