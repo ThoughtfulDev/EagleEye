@@ -33,8 +33,10 @@ class FaceRecog:
         for path in pathlist:
             p_str = str(path)
             delim = '/'
-            if platform == "win32":
-                delim = '\\'
+            if platform == "win32": # if windows
+                delim = '\\' # change delimiter
+            else: # if not windows
+                console.error('OS not supported') # return error message is not windows
             console.subtask('Loading {0}'.format(p_str.split(delim)[1]))
             im = face_recognition.load_image_file(p_str)
             encoding = face_recognition.face_encodings(im, num_jitters=self.num_jitters)
