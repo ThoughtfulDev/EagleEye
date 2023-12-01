@@ -72,6 +72,8 @@ class FaceRecog:
                     first_match_index = matches.index(True)
                     name = self.known_face_names[first_match_index]
                 face_names.append(name)
+                else:
+                    console.error('No face found')
 
             for _, name in zip(face_locations, face_names):
                 if name == label:
