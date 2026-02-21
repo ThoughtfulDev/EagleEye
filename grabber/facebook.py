@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 import utils.config as cfg
 import utils.console as console
 
@@ -22,7 +23,7 @@ class FBGrabber:
         time.sleep(10)
 
         #get all profile image links
-        profile_img_links = driver.find_elements_by_xpath("//a[@class='_2ial']")
+        profile_img_links = driver.find_elements(By.XPATH, "//a[@class='_2ial']")
         console.subtask('Collecting Image URLs...(Page 1)')
 
         if len(profile_img_links) <= 0:
@@ -30,12 +31,12 @@ class FBGrabber:
         else:
             for e in profile_img_links:
                 href = e.get_attribute("href")
-                image = e.find_element_by_tag_name("img")
+                image = e.find_element(By.TAG_NAME, "img")
                 img_src = image.get_attribute("src")
                 self.profile_list.append(href)
                 self.profile_img.append(img_src)
         
-        pages = driver.find_elements_by_xpath("//a")
+        pages = driver.find_elements(By.XPATH, "//a")
         pages_links = []
         for e in pages:
             link = e.get_attribute('href')
@@ -45,12 +46,12 @@ class FBGrabber:
 
         for page in pages_links:
             driver.get(page)
-            profile_img_links = driver.find_elements_by_xpath("//a[@class='_2ial']")
+            profile_img_links = driver.find_elements(By.XPATH, "//a[@class='_2ial']")
             page_num = page[-1:]
             console.subtask('Collecting Images URLs...(Page {0})'.format(page_num))
             for e in profile_img_links:
                 href = e.get_attribute("href")
-                image = e.find_element_by_tag_name("img")
+                image = e.find_element(By.TAG_NAME, "img")
                 img_src = image.get_attribute("src")
                 self.profile_list.append(href)
                 self.profile_img.append(img_src)
@@ -76,13 +77,13 @@ class FBProfileGrabber:
 
             #first possibility
             
-            profile_img_links = driver.find_elements_by_xpath("/html/body/div[1]/div[4]/div[1]/div/div[2]/div[2]/div[2]/div/div[1]/div[1]/div[3]/div/div[2]/div[3]/div/div/div/img")
+            profile_img_links = driver.find_elements(By.XPATH, "/html/body/div[1]/div[4]/div[1]/div/div[2]/div[2]/div[2]/div/div[1]/div[1]/div[3]/div/div[2]/div[3]/div/div/div/img")
             for e in profile_img_links:
                 img_src = e.get_attribute("src")
                 img_urls.append(img_src)
             
             #second possivility
-            profile_img_links = driver.find_elements_by_xpath("/html/body/div[1]/div[1]/div[3]/div[1]/div/div/div[1]/div/div/div[1]/div/div/div/a/div/img")
+            profile_img_links = driver.find_elements(By.XPATH, "/html/body/div[1]/div[1]/div[3]/div[1]/div/div/div[1]/div/div/div[1]/div/div/div/a/div/img")
             for e in profile_img_links:
                 img_src = e.get_attribute("src")
                 img_urls.append(img_src)

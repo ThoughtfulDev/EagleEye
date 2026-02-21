@@ -144,7 +144,7 @@ Change the value in `config.json` to the path of the `geckodriver` e.g
     },
     "WEBDRIVER": {
         "ENGINE": "firefox",
-        "PATH": "/usr/local/bin/geckodriver"
+        "PATH": "C:\Program Files\Mozilla Firefox"
     },
     "FILTER": [
         ....

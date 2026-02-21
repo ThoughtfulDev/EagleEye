@@ -1,4 +1,5 @@
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
 import utils.config as cfg
 import utils.console as console
 from pathlib import Path
@@ -24,21 +25,21 @@ class ImageRaiderGrabber:
     
     def insertImageLinks(self, images):
         self.driver.get("https://www.imageraider.com/")
-        input = self.driver.find_elements_by_xpath('//*[@id="topurllist"]')[0]
+        input = self.driver.find_elements(By.XPATH, '//*[@id="topurllist"]')[0]
         for i in images:
             console.subtask('Inserting {0}'.format(i))
             input.send_keys(i)
             input.send_keys(Keys.RETURN)
         console.subtask('Submitting...')
-        btn = self.driver.find_elements_by_xpath('/html/body/div[4]/div/div/article/div/div[1]/form/span/input')[0]
+        btn = self.driver.find_elements(By.XPATH, '/html/body/div[4]/div/div/article/div/div[1]/form/span/input')[0]
         btn.click()
     
     def uploadLocalImage(self, img):
         self.driver.get("https://www.imageraider.com/")
-        input = self.driver.find_elements_by_xpath('//*[@id="file"]')[0]
+        input = self.driver.find_elements(By.XPATH, '//*[@id="file"]')[0]
         p_i = os.path.join(os.getcwd(), img)
         input.send_keys(p_i)
-        btn = self.driver.find_elements_by_xpath('/html/body/div[4]/div/div/article/div/div[1]/span/form/input[3]')[0]
+        btn = self.driver.find_elements(By.XPATH, '/html/body/div[4]/div/div/article/div/div[1]/span/form/input[3]')[0]
         btn.click()
     
     def downloadCSV(self):
@@ -56,7 +57,7 @@ class ImageRaiderGrabber:
         console.task('Downloading CSV')
         time.sleep(2)
         try:
-            dl = self.driver.find_elements_by_xpath('//*[@id="dltop"]')[0]
+            dl = self.driver.find_elements(By.XPATH, '//*[@id="dltop"]')[0]
             dl.click()
         except:
             console.failure('No Results...')
@@ -80,5 +81,3 @@ class ImageRaiderGrabber:
             return links
         else:
             return []
-
-

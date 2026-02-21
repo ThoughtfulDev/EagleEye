@@ -35,7 +35,7 @@ class GoogleGrabber:
 
     def getLinks(self):
         try:
-            link_name = self.driver.find_elements_by_tag_name('a')
+            link_name = self.driver.find_elements(By.TAG_NAME, 'a')
             links = []
             for l in link_name:
                 link = l.get_attribute('href')
@@ -73,10 +73,10 @@ class GoogleGrabber:
         console.subtask('Inserting Image URL')
         console.task("Please agree to google's stuff in the browser")
         time.sleep(10)
-        elems = driver.find_elements_by_xpath(self.PHOTO_XPATH)[0]
+        elems = driver.find_elements(By.XPATH, self.PHOTO_XPATH)[0]
         elems.click()
         time.sleep(1)
-        input = driver.find_elements_by_xpath('//*[@id="Ycyxxc"]')[0]
+        input = driver.find_elements(By.XPATH, '//*[@id="Ycyxxc"]')[0]
         input.clear()
         input.send_keys(img_url)
         input.send_keys(Keys.RETURN)
@@ -84,7 +84,7 @@ class GoogleGrabber:
         time.sleep(cfg.timeout() * 2)
         pred_error = False
         try:
-            pred = driver.find_element_by_xpath(self.PRED_XPATH)
+            pred = driver.find_element(By.XPATH, self.PRED_XPATH)
         except NoSuchElementException:
             console.subfailure('No Prediction given sry...')
             pred = None
@@ -92,7 +92,7 @@ class GoogleGrabber:
         except BrokenPipeError:
             #just try again...
             try:
-                pred = driver.find_element_by_xpath(self.PRED_XPATH)
+                pred = driver.find_element(By.XPATH, self.PRED_XPATH)
             except NoSuchElementException:
                 console.subfailure('Broken pipe Error. This is not a Problem...moving on!')
                 console.subfailure('No Prediction given sry...')
@@ -110,7 +110,7 @@ class GoogleGrabber:
         for num in range(2, self.max_pages+1):
             console.subtask("Switching to Page {0}".format(num))
             try:
-                page_n = driver.find_element_by_link_text(str(num))
+                page_n = driver.find_element(By.LINK_TEXT, str(num))
                 page_n.click()
                 time.sleep(cfg.timeout())
                 console.subtask("Collecting Links...(Page {0})".format(num))
@@ -133,21 +133,21 @@ class GoogleGrabber:
             driver.get("https://www.google.com/imghp")
             console.task("Please agree to google's stuff in the browser")
             time.sleep(10)
-            elems = driver.find_elements_by_xpath(self.PHOTO_XPATH)[0]
+            elems = driver.find_elements(By.XPATH, self.PHOTO_XPATH)[0]
             elems.click()
             time.sleep(1)
-            elems = driver.find_element_by_xpath(self.PHOTO_UPLOAD_XPATH)
+            elems = driver.find_element(By.XPATH, self.PHOTO_UPLOAD_XPATH)
             
             elems.click()
             time.sleep(1)
             console.subtask("Inserting Path")
-            input_box = driver.find_element_by_xpath('//*[@id="awyMjb"]')
+            input_box = driver.find_element(By.XPATH, '//*[@id="awyMjb"]')
             p_i = os.path.join(os.getcwd(), str_p)
             input_box.send_keys(p_i)
             time.sleep(cfg.timeout() * 2)
             pred_error = False
             try:
-                pred = driver.find_element_by_xpath(self.PRED_XPATH)
+                pred = driver.find_element(By.XPATH, self.PRED_XPATH)
             except NoSuchElementException:
                 console.subfailure('No Prediction given sry...')
                 pred = None
@@ -155,7 +155,7 @@ class GoogleGrabber:
             except BrokenPipeError:
                 #just try again...
                 try:
-                    pred = driver.find_element_by_xpath(self.PRED_XPATH)
+                    pred = driver.find_element(By.XPATH, self.PRED_XPATH)
                 except NoSuchElementException:
                     console.subfailure('Broken pipe Error. This is not a Problem...moving on!')
                     console.subfailure('No Prediction given sry...')
@@ -172,7 +172,7 @@ class GoogleGrabber:
             for num in range(2, self.max_pages+1):
                 console.subtask("Switching to Page {0}".format(num))
                 try:
-                    page_n = driver.find_element_by_link_text(str(num))
+                    page_n = driver.find_element(By.LINK_TEXT, str(num))
                     page_n.click()
                     time.sleep(cfg.timeout())
                     console.subtask("Collecting Links...(Page {0})".format(num))

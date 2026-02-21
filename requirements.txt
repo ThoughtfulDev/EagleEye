@@ -4,3 +4,4 @@ selenium
 face_recognition
 WeasyPrint
 requests-html
+pypdf

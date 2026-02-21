@@ -1,20 +1,19 @@
 import json
 import os
 import sys
-import tempfile
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
 
+# Load config.json
 with open('./config.json') as json_data:
     cfg = json.load(json_data)
-
 
 def timeout():
     return int(cfg['DEFAULTS']['SLEEP_DELAY'])
 
-
 def google_img_pages():
     return int(cfg['DEFAULTS']['GOOGLE_IMG_PAGES'])
-
 
 def google_filter():
     return cfg['FILTER']
@@ -27,22 +26,26 @@ def jitters():
 
 def getWebDriver():
     if not os.path.isfile(cfg['WEBDRIVER']['PATH']):
-        print("{0} does not exist - install a webdriver".format(cfg['WEBDRIVER']['PATH']))
+        print(f"{cfg['WEBDRIVER']['PATH']} does not exist")
         sys.exit(-2)
-    d = cfg['WEBDRIVER']['ENGINE']
-    if d.lower() == 'firefox':
-        os.environ["webdriver.firefox.driver"] = cfg['WEBDRIVER']['PATH']
-        p = os.path.join(tempfile.gettempdir(), 'imageraider')
-        if not os.path.isdir(p):
-            os.makedirs(p)
-        profile = webdriver.FirefoxProfile()
-        profile.set_preference('browser.download.folderList', 2) # custom location
-        profile.set_preference('browser.download.manager.showWhenStarting', False)
-        profile.set_preference('browser.download.dir', p)
-        profile.set_preference('browser.helperApps.neverAsk.saveToDisk', 'text/csv')
-        profile.set_preference("browser.link.open_newwindow", 3)
-        profile.set_preference("browser.link.open_newwindow.restriction", 2)
-        return webdriver.Firefox(profile)
-    else:
-        os.environ["webdriver.chrome.driver"] = cfg['WEBDRIVER']['PATH']
-        return webdriver.Chrome()
+    
+    driver_type = cfg['WEBDRIVER']['ENGINE'].lower()
+    
+    if driver_type == 'firefox':
+        options = Options()
+        
+        # Essential Docker Stability Flags
+        options.add_argument("--headless")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--window-size=1920,1080")
+        
+        # Extra 'Status 1' Killers
+        options.add_argument("--disable-gpu")
+        options.add_argument("--disable-software-rasterizer")
+        options.set_preference("browser.tabs.remote.autostart", False)
+        
+        service = Service(executable_path=cfg['WEBDRIVER']['PATH'])
+        return webdriver.Firefox(service=service, options=options)
+    
+    return webdriver.Chrome()

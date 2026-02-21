@@ -1,27 +1,59 @@
-FROM ubuntu:16.04
+FROM ubuntu:22.04
 
-RUN apt-get clean && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
+# Avoid prompts from apt
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 1. Install System Dependencies
+RUN apt-get update && apt-get install -y \
+    locales \
+    git \
+    curl \
+    software-properties-common \
+    unzip \
+    wget \
+    python3-pip \
+    python3-dev \
+    libboost-all-dev \
+    build-essential \
+    cmake \
+    libffi-dev \
+    firefox \
+    dos2unix \
+    # --- LIBRARIES TO FIX STATUS 1 ---
+    libgtk-3-0 \
+    libdbus-glib-1-2 \
+    libxt6 \
+    libxrender1 \
+    libasound2 \
+    libnss3 \
+    libxcomposite1 \
+    xvfb \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set up locales
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
-ENV TERM dumb
-ENV PYTHONIOENCODING=utf-8
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y git curl software-properties-common unzip
-RUN apt-get update && add-apt-repository -y ppa:deadsnakes/ppa && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y python3.6 python3.6-dev
-RUN curl https://bootstrap.pypa.io/get-pip.py | python3.6
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y libgtk-3-dev libboost-all-dev build-essential cmake libffi-dev
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y firefox
-RUN git clone https://github.com/ThoughtfulDev/EagleEye
-WORKDIR EagleEye
-RUN pip3.6 install -r requirements.txt
-RUN pip3.6 install --upgrade beautifulsoup4 html5lib spry
-ADD https://github.com/mozilla/geckodriver/releases/download/v0.27.0/geckodriver-v0.27.0-linux64.tar.gz /EagleEye/geckodriver.tar.gz
-RUN tar -xvf geckodriver.tar.gz
-RUN mv geckodriver /usr/bin/geckodriver
-RUN chmod +x /usr/bin/geckodriver
-RUN rm -r /EagleEye/known/
-ENTRYPOINT bash /entry.sh
+WORKDIR /EagleEye
+COPY . /EagleEye
 
+# Fix Windows line endings and permissions
+RUN dos2unix /EagleEye/entry.sh && chmod +x /EagleEye/entry.sh
+
+# Install Python Dependencies
+RUN pip3 install --upgrade pip
+RUN pip3 install "urllib3<2.0.0"
+RUN pip3 install lxml_html_clean
+RUN pip3 install -r requirements.txt
+
+# Install Geckodriver (Updated for Firefox 147)
+RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux64.tar.gz && \
+    tar -xvzf geckodriver-v0.36.0-linux64.tar.gz && \
+    mv geckodriver /usr/local/bin/ && \
+    rm geckodriver-v0.36.0-linux64.tar.gz
+
+RUN mkdir -p /result
+
+ENTRYPOINT ["/bin/bash", "/EagleEye/entry.sh"]

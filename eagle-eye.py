@@ -10,6 +10,7 @@ import utils.config as cfg
 from grabber.facebook import FBGrabber, FBProfileGrabber
 from grabber.google import GoogleGrabber
 from grabber.instagram import InstagramGrabber
+from grabber.foca import FocaGrabber
 from face_recog import FaceRecog
 import subprocess, json, shutil
 from report.report import makeReport, makeJSONReport
@@ -61,7 +62,7 @@ def getInstaLinks(username):
     instagrabber = InstagramGrabber(username)
     return instagrabber.getLinks()
 
-def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=None):
+def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=None, useFoca=False):
     if not skipFB:
         # collect user input
         if dockerMode:
@@ -76,6 +77,19 @@ def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=Non
     else:
         console.task('Skipping FB Search')
         name = "Unknown"
+
+    if useFoca:
+        console.section("Running Foca")
+        foca = FocaGrabber(name)
+        foca.grabData()
+        metadata = foca.getMetadata()
+        if metadata:
+            console.task("Found Metadata:")
+            for key, value in metadata.items():
+                if value:
+                    console.subtask(f"{key}: {value}")
+        else:
+            console.failure("No metadata found.")
 
     
     if dockerMode:
@@ -155,9 +169,9 @@ def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=Non
     console.section('Links')
     print(rev_links)
     console.section('Predictions')
-    try:
-        predictions = [x.lower() for x in predictions]
-    except:
+    if predictions:
+        predictions = [x.lower() for x in predictions if x]
+    else:
         predictions = []
     print(predictions)
     presentResult(predictions)
@@ -188,6 +202,7 @@ if __name__ == "__main__":
     console.banner()
     parser = argparse.ArgumentParser()
     parser.add_argument('-sFB', '--skipfb', action='store_true', help='Skips the Facebook Search')
+    parser.add_argument('--foca', action='store_true', help='Enable FOCA to extract metadata from found documents.')
     parser.add_argument('-d', '--docker', action='store_true', help='Set this flag if run in docker mode')
     parser.add_argument('-n', '--name', nargs='?', help='Specify the persons name. Only active with the --docker flag')
     parser.add_argument('-json', '--json', nargs='?', help='Generates a json report. Specify a Filename')
@@ -221,9 +236,9 @@ if __name__ == "__main__":
             with open(args.facebookList, 'r') as f:
                 content = f.readlines()
             content = [x.strip() for x in content] 
-            main(skipFB=args.skipfb, FBUrls=content, jsonRep=jsonRepFile, dockerMode=aDocker, dockerName=aName)
+            main(skipFB=args.skipfb, FBUrls=content, jsonRep=jsonRepFile, dockerMode=aDocker, dockerName=aName, useFoca=args.foca)
         else:
             console.failure("File '{}' does not exist".format(args.facebookList))
             sys.exit(-1)
     else:
-        main(skipFB=args.skipfb, FBUrls=[], jsonRep=jsonRepFile, dockerMode=aDocker, dockerName=aName)
+        main(skipFB=args.skipfb, FBUrls=[], jsonRep=jsonRepFile, dockerMode=aDocker, dockerName=aName, useFoca=args.foca)
