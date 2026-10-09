@@ -1,6 +1,13 @@
 from termcolor import colored
 import os
 import getpass
+import sys
+
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass
 
 VER = "0.2"
 

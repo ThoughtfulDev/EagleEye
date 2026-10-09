@@ -35,24 +35,30 @@ def filterInstaLinks(links):
     return r
 
 def parseInstaUsername(links):
+    from urllib.parse import urlparse
     usernames = []
+    ignored = {'p', 'explore', 'stories', 'reel', 'reels', 'tv', 'about'}
     for l in links:
-        a = l[8:]
-        a = a.split('/')
-        if len(a) >= 2:
-            if len(a[1]) >= 4:
-                usernames.append(a[1])
-        else:
+        try:
+            parsed = urlparse(l)
+            path_parts = [p for p in parsed.path.strip('/').split('/') if p]
+            if path_parts and path_parts[0] not in ignored:
+                user = path_parts[0]
+                if len(user) >= 3:
+                    usernames.append(user)
+        except Exception:
             console.subfailure('Error parsing {0}'.format(l))
-    return usernames
+    return list(set(usernames))
 
 
 def validateInstaUser(username, num_jitters):
     images = getInstaLinks(username)
-    #print(images)
     if len(images) >= cfg.instaLimit():
         images = images[:cfg.instaLimit()]
-    r = FaceRecog(username, images, num_jitters=num_jitters)
+    if not images:
+        return False
+    profile_links_mock = ["https://www.instagram.com/{0}".format(username)] * len(images)
+    r = FaceRecog(profile_links_mock, images, num_jitters=num_jitters)
     r.loadKnown(username)
     profile_links, _ = r.getValidLinksAndImg(username)
     return len(profile_links) > 0
@@ -156,7 +162,7 @@ def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=Non
     print(rev_links)
     console.section('Predictions')
     try:
-        predictions = [x.lower() for x in predictions]
+        predictions = [x.lower() for x in predictions if x]
     except:
         predictions = []
     print(predictions)
@@ -177,10 +183,7 @@ def main(skipFB=False, FBUrls=[], jsonRep=None, dockerMode=False, dockerName=Non
 
     p = os.path.join(tempfile.gettempdir(), 'imageraider')
     if os.path.isdir(p):
-        pathlist = Path(p).glob('**/*')
-        for path in pathlist:
-            s_p = str(path)
-            os.remove(s_p)
+        shutil.rmtree(p, ignore_errors=True)
     console.task("KTHXBYE")
 
 

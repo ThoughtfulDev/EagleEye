@@ -1,19 +1,22 @@
+import csv
+import os
+from pathlib import Path
+import sys
+import tempfile
+import time
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import utils.config as cfg
 import utils.console as console
-from pathlib import Path
-import os
-import time
-import sys
-import tempfile
-import csv
+
 
 def filterLink(link):
     filters = cfg.google_filter()
     for f in filters:
-        if f in link:
+        if link and f in link:
             return True
     return False
+
 
 class ImageRaiderGrabber:
     def __init__(self):
@@ -21,26 +24,35 @@ class ImageRaiderGrabber:
         console.task('Opening Webdriver')
         self.driver = cfg.getWebDriver()
         self.csv_error = False
-    
+
     def insertImageLinks(self, images):
         self.driver.get("https://www.imageraider.com/")
-        input = self.driver.find_elements_by_xpath('//*[@id="topurllist"]')[0]
+        inputs = self.driver.find_elements(By.XPATH, '//*[@id="topurllist"]')
+        if not inputs:
+            console.subfailure("Could not find ImageRaider URL input")
+            return
+        inp = inputs[0]
         for i in images:
             console.subtask('Inserting {0}'.format(i))
-            input.send_keys(i)
-            input.send_keys(Keys.RETURN)
+            inp.send_keys(i)
+            inp.send_keys(Keys.RETURN)
         console.subtask('Submitting...')
-        btn = self.driver.find_elements_by_xpath('/html/body/div[4]/div/div/article/div/div[1]/form/span/input')[0]
-        btn.click()
-    
+        btns = self.driver.find_elements(By.XPATH, '/html/body/div[4]/div/div/article/div/div[1]/form/span/input')
+        if btns:
+            btns[0].click()
+
     def uploadLocalImage(self, img):
         self.driver.get("https://www.imageraider.com/")
-        input = self.driver.find_elements_by_xpath('//*[@id="file"]')[0]
+        inputs = self.driver.find_elements(By.XPATH, '//*[@id="file"]')
+        if not inputs:
+            console.subfailure("Could not find ImageRaider file input")
+            return
         p_i = os.path.join(os.getcwd(), img)
-        input.send_keys(p_i)
-        btn = self.driver.find_elements_by_xpath('/html/body/div[4]/div/div/article/div/div[1]/span/form/input[3]')[0]
-        btn.click()
-    
+        inputs[0].send_keys(p_i)
+        btns = self.driver.find_elements(By.XPATH, '/html/body/div[4]/div/div/article/div/div[1]/span/form/input[3]')
+        if btns:
+            btns[0].click()
+
     def downloadCSV(self):
         time.sleep(5)
         console.task('Waiting for page to finish')
@@ -49,36 +61,49 @@ class ImageRaiderGrabber:
                 sys.stdout.write(".")
                 sys.stdout.flush()
                 time.sleep(1)
-        except:
+        except Exception:
             console.subfailure('Pagetimeout')
             sys.exit(-1)
         print('')
         console.task('Downloading CSV')
         time.sleep(2)
         try:
-            dl = self.driver.find_elements_by_xpath('//*[@id="dltop"]')[0]
-            dl.click()
-        except:
+            dls = self.driver.find_elements(By.XPATH, '//*[@id="dltop"]')
+            if dls:
+                dls[0].click()
+            else:
+                console.failure('No Results...')
+                self.csv_error = True
+        except Exception:
             console.failure('No Results...')
             self.csv_error = True
-        self.driver.close()
-    
+        try:
+            self.driver.quit()
+        except Exception:
+            pass
+
     def processCSV(self):
         if not self.csv_error:
             time.sleep(2)
             p = os.path.join(tempfile.gettempdir(), 'imageraider')
+            if not os.path.isdir(p):
+                return []
             pathlist = Path(p).glob('**/*')
             links = []
             for path in pathlist:
-                path = str(path)
-                with open(path, 'r') as csvfile:
-                    reader = csv.DictReader(csvfile)
-                    for row in reader:
-                        if filterLink(row['Discovered Page URL']):
-                            console.subtask('Added {0}'.format(row['Discovered Page URL']))
-                            links.append(row['Discovered Page URL'])
+                if not path.is_file():
+                    continue
+                path_str = str(path)
+                try:
+                    with open(path_str, 'r', encoding='utf-8', errors='replace') as csvfile:
+                        reader = csv.DictReader(csvfile)
+                        for row in reader:
+                            page_url = row.get('Discovered Page URL')
+                            if page_url and filterLink(page_url):
+                                console.subtask('Added {0}'.format(page_url))
+                                links.append(page_url)
+                except Exception:
+                    continue
             return links
         else:
             return []
-
-

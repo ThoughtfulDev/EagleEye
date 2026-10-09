@@ -1,4 +1,7 @@
-from weasyprint import HTML
+try:
+    from weasyprint import HTML
+except (ImportError, OSError):
+    HTML = None
 import os
 import json
 
@@ -10,7 +13,7 @@ def makeReport(name, links, preds, instnames):
 
     name = name.strip()
     name = name.replace('%20', '-')
-    with open('./report/template.html', 'r') as f:
+    with open('./report/template.html', 'r', encoding='utf-8') as f:
         template_data = f.read()
     template_data = template_data.replace('{{INPUT_NAME}}', name)
     links_str = ""
@@ -31,11 +34,20 @@ def makeReport(name, links, preds, instnames):
         insta_str += '<a href="https://www.instagram.com/{0}">https://instagram.com/{0}</a>'.format(i)
         insta_str += "</li>"
     template_data = template_data.replace('{{INSTA_PROFILES}}', insta_str)
-    with open('tmp.html', 'w') as t:
+
+    if HTML is None:
+        html_report_path = '{0}_Report.html'.format(name)
+        with open(html_report_path, 'w', encoding='utf-8') as t:
+            t.write(template_data)
+        print("[*] Note: WeasyPrint GTK3 runtime not installed; saved HTML report to {0}".format(html_report_path))
+        return
+
+    with open('tmp.html', 'w', encoding='utf-8') as t:
         t.write(template_data)
     doc = HTML('tmp.html')
     doc.write_pdf('{0}_Report.pdf'.format(name))
-    os.remove('tmp.html')
+    if os.path.exists('tmp.html'):
+        os.remove('tmp.html')
 
 def makeJSONReport(name, links, preds, instnames, fn):
     data = {}
